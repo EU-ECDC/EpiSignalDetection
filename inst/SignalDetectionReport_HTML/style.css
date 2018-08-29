@@ -1,0 +1,11 @@
+<style>
+  th,td{
+    padding:3px 30px 3px 30px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #69AE23;
+    color: white;
+  }
+</style>
