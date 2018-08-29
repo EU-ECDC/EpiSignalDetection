@@ -1,0 +1,21 @@
+
+### `r i`
+
+
+```{r, results = 'asis'}
+
+if(nrow(Result_c) != 0) {
+    DT::datatable(Result_c, 
+                  rownames=FALSE, 
+                  escape=FALSE,
+                  options = list(
+                    pageLength = 20,
+                    autoWidth = FALSE,
+                    order = list(list(6, 'desc')),
+                    dom = 't',
+                    columnDefs = list(list(className = 'dt-left', orderable = TRUE, targets = "_all")))
+            )
+}else {pander::pandoc.p("No alarms")}
+
+```
+

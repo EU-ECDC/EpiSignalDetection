@@ -1,0 +1,17 @@
+<style>
+  table {
+    width: 100%;
+  }
+  
+  thead{
+    background-color: #65B32F;
+    color: white;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+  
+  td{
+    padding:3px 30px 3px 30px;
+    border-bottom: 1px solid #ddd;
+  }
+</style>

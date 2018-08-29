@@ -1,0 +1,274 @@
+---
+title: "Report of alarms" 
+subtitle: " `r params$disease` - `r params$stratification` -  in `r params$country` (`r params$indicator`) "
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  html_document:
+    css: "style.css"
+    number_sections: true
+    theme: united
+    toc: true
+    toc_depth: 3
+    toc_float: true
+params:
+  file : NULL
+  disease: "Salmonellosis"
+  country: "Greece"
+  indicator: "Reported cases"
+  stratification: "Confirmed cases"
+  unit: "Month"
+  daterange: !r c("2011-01-01", "2016-12-31")
+  algo: "FarringtonFlexible"
+  testingperiod: !r 6
+  tempPath: !r tempdir()
+---
+
+
+
+```{r Config, echo = FALSE, results = 'hide', warning = FALSE, message = FALSE}
+
+##******************************************************************************
+## Chunk options
+##******************************************************************************
+
+knitr::opts_chunk$set(eval=TRUE, echo=FALSE, 
+               fig.align='center',fig.width=13,fig.height=5,
+               message=FALSE, warning=FALSE)
+
+knitr::knit_hooks$set(inline = function(x) {
+  format(x, big.mark=",")
+})
+
+##******************************************************************************
+## Definition of the main color of graphs and table
+##******************************************************************************
+
+maincolor="#69AE23"
+
+
+##******************************************************************************
+## Libraries
+##******************************************************************************
+library(ggplot2)
+library(dplyr)
+```
+
+
+
+
+
+```{r Parameters}
+## ~~~~~~~~~~~~~~~~
+## Setting parameters
+## ~~~~~~~~~~~~~~~~
+
+if(is.null(params$file)) {
+  dataset <- EpiSignalDetection::SignalData #eval(parse( text = params$dataset))
+} else {
+  inFile <- params$file
+  dataset <- EpiSignalDetection::importAtlasExport(inFile$datapath)
+  dataset <- EpiSignalDetection::cleanAtlasExport(dataset)
+}
+
+
+input <- list(
+  disease = params$disease,
+  country = params$country,
+  indicator = params$indicator,
+  stratification = params$stratification,
+  unit = params$unit,
+  daterange = params$daterange,
+  algo = params$algo,
+  testingperiod = params$testingperiod
+)
+
+tempPath <- params$tempPath
+
+#--- Filtering on country, stratification and time unit
+dataset <- EpiSignalDetection::filterAtlasExport(dataset, input)
+
+```
+
+
+```{r StudyPeriod}
+#--- Defining the study period
+StudyPeriod <- EpiSignalDetection::studyPeriod(input)
+#--- Defining the testing period period
+TestingPeriod <- StudyPeriod$Time[length(StudyPeriod$Time):(length(StudyPeriod$Time) - input$testingperiod + 1)]
+
+```
+
+
+```{r Gaps}
+
+#-- Excluding countries with gaps and EU pre-computed values from the TS
+excluded <- unique(dataset$RegionName[ is.na(dataset$NumValue) ])
+
+if (input$country == "EU-EEA - complete series") {
+  included <- unique(dataset$RegionName[!(dataset$RegionName %in% c(excluded, "EU", "EU/EEA"))])
+  if (length(included) != 0) {
+    dataset <- dplyr::filter(dataset, dataset$RegionName %in% included )
+  } else {
+    warning("All countries present with at least one gap in the time series")
+  }
+} else if (length(excluded) !=0) {
+  warning("The selected country presents with at least one gap in the time series")
+}
+
+#-- Dataset for the testing period (TP) only
+datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
+
+```
+
+
+
+# Study period: `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time)]`
+* __Historical data__: From `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
+* __Alarm detection period__: The last `r input$testingperiod` `r tolower(input$unit)`(s) of the study period: from `r TestingPeriod[input$testingperiod]` to  `r TestingPeriod[1]`.
+* __Time unit__: `r input$unit`(s). 
+* __Signal detection algorithm__: `r input$algo`.
+* __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
+
+
+# Alarm detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+
+* There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported in the alarm detection period.
+* There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` country(ies) reporting at least 1 case in the alarm detection period.
+
+```{r GraphByReportingCountries}
+if(input$country == "EU-EEA - complete series") {
+  
+  datasetByCountry <- datasetTP %>%
+    dplyr::group_by_( c("RegionName") ) %>%
+    dplyr::summarise( NumValue = sum(NumValue)  ) %>%
+    dplyr::ungroup()
+  
+  p <- ggplot(datasetByCountry, aes(x = RegionName, y = NumValue)) +
+    geom_bar(stat = "identity", fill = maincolor) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(title = "Graph: Number of cases observed by country in the alarm detection period", 
+         x = "Reporting country", y = "Number of cases") +
+    theme(title = element_text(size = 14), 
+          axis.text = element_text(size = 12),
+          axis.text.x = element_text(size = 12, angle = 90),
+          axis.title = element_text(size = 14, face = "bold"), 
+          plot.title = element_text(color = "grey", hjust = 0, vjust = 0),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank())
+  p
+  
+}
+
+
+```
+
+# Signal detection: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+
+<a name="result_tables"></a>
+
+
+```{r LoopByCountry, eval = TRUE, results = 'hide'}
+
+#--- Preparation of the result table that will be append through the following loop
+Result <- data.frame( Time = "" ,  
+                      Place = "" , 
+                      Observed = "" ,
+                      Threshold.ALGO = "", 
+                      ALGO = "", # Graph="", 
+                      stringsAsFactors=FALSE)
+
+#-- Creation of a EU/EEA
+if(input$country == "EU-EEA - complete series"){
+  datasetEU <- dataset %>%
+    dplyr::group_by_( c("StudyPeriod") ) %>%
+    dplyr::summarise( NumValue = sum(NumValue)  ) %>%
+    dplyr::ungroup()
+  datasetEU <- data.frame(RegionName = "EU-EEA - complete series", datasetEU)
+  dataset <- dataset[, c("RegionName", "StudyPeriod", "NumValue")]
+  dataset <- rbind(datasetEU, dataset)
+}
+
+out <- NULL
+countries <- na.omit(unique(dataset$RegionName))
+
+for(i in 1:length(countries)){
+  country = countries[i]
+  dataset_1 = dplyr::filter(dataset, RegionName == country)
+  
+  #-------------------------------------------------------
+  #---- Sts object
+  #-------------------------------------------------------
+  
+  dataset.sts <- EpiSignalDetection::stsSD(observedCases = dataset_1$NumValue,
+                                           studyPeriod = dataset_1$StudyPeriod,
+                                           timeUnit = input$unit,
+                                           startYM = c(as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%Y")),
+                                                       as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%m"))))
+  
+  #-------------------------------------------------------
+  #---- Detection algorithm
+  #-------------------------------------------------------
+  
+  dataset.algo <- EpiSignalDetection::algoSD(dataset.sts,
+                                             algo = input$algo,
+                                             timeUnit = input$unit,
+                                             testingPeriod = input$testingperiod)
+  
+  #-------------------------------
+  #--- Saving the plot
+  #-------------------------------
+  
+  if (!file.exists(paste(tempPath, "\\plots", sep = ""))){
+    dir.create(file.path(tempPath, "plots"))
+  }
+  png(file=paste(tempPath, "/plots/", sub("/", "-", country), "_TimeSeries.png", sep = ""), width = 1450, height = 500, res=90)
+  EpiSignalDetection::plotSD(dataset_1, input, subRegionName = country, x.sts = dataset.sts, x.algo = dataset.algo)
+  dev.off()
+  
+  #-------------------------------
+  #--- Incrementation of the Result table
+  #------------------------------- 
+  
+  for(l in 1:(input$testingperiod)){
+    Result <- rbind(Result,
+                    data.frame(Time = TestingPeriod[input$testingperiod +1 -l], #as.Date(Time$StudyPeriod[l])
+                               Place = country,
+                               Observed = as.character(dataset.algo@observed[l]),
+                               Threshold.ALGO = as.character(round(dataset.algo@upperbound[l],0)),
+                               ALGO = ifelse(dataset.algo@alarm[l],"<span style=\"color:#DD4814\">Alarm</span>","no")
+                               # Graph = paste("<a href=\"", tempPath,"/htmlpages/", country,".html\"> Link to figure<//a> ", sep = "")
+                               
+                    )
+    )
+  } 
+  
+}
+
+Result <- Result[-1,]
+
+```
+
+
+`r paste(out, collapse='\n')`
+
+
+```{r AlarmTable, results = 'hide'}
+
+out=NULL
+
+for(i in countries){  
+  Result_c <- dplyr::filter(Result, Place == i & grepl("Alarm", ALGO))
+  row.names(Result_c) <- NULL
+  names(Result_c) <- c(paste("Time (agg. by ", tolower(input$unit), ")", sep = ""),
+                       "Place",
+                       "Reported cases",
+                       "Threshold value",
+                       "Alarm")
+  
+  out <- c(out,knitr::knit_child('subsection.Rmd'))
+  
+}
+
+```
+
+`r paste(out, collapse='\n')`

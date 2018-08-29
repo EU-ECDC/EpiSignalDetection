@@ -1,0 +1,33 @@
+Package: EpiSignalDetection
+Type: Package
+Title: Signal Detection Analysis
+Version: 0.1.0
+Author: Lore Merdrignac
+Maintainer: Lore Merdrignac <l.merdrignac@epiconcept.fr>
+Description: The EpiSignalDetection package allows to explore time series for signal detection. 
+    It is specifically designed to detect outbreaks for infectious disease surveillance data at EU/EEA or country level.
+    The package includes:
+    - An interactive Shiny application in which the user can import external data and perform basic signal detection analysis;
+    - An automated report in HTML format, presenting the results of the time series analysis in tables and graphs 
+    of signals detected at EU/EEA and country level. 
+    This report can also be stratified by population characteristics (see 'Population' variable).
+Depends: R (>= 3.4.0)
+License: EUPL
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
+Imports:
+    shiny,
+    shinythemes,
+    dplyr,
+    pander,
+    DT,
+    surveillance,
+    ISOweek,
+    ggplot2,
+    graphics,
+    utils,
+    knitr (>= 1.20),
+    rmarkdown
+VignetteBuilder: knitr
+URL: http://atlas.ecdc.europa.eu/public/index.aspx
