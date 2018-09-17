@@ -20,7 +20,7 @@ importAtlasExport <- function(x) {
                     sep = ",",
                     quote = "\"",
                     stringsAsFactors = FALSE,
-                    na.strings = "-") # NOTE: Please note that a missing report '-' will be NA
+                    na.strings = "-") ##Please note that a missing report '-' will be NA
 
 }
 
@@ -55,36 +55,48 @@ cleanAtlasExport <- function(x) {
 
 
   #-- Keep variables of interest
-  x <- dplyr::select(x, c("HealthTopic", "Population", "Indicator", "Time", "RegionName", "NumValue"))
+  x <- dplyr::select(x, c("HealthTopic", "Population",
+                          "Indicator", "Time",
+                          "RegionName", "NumValue"))
 
 
   #-- Formating Time Unit variable for Date variables
-  x$TimeUnit <- ifelse(grepl("[0-9]{4}", x$Time), "Year", NA)
-  x$TimeUnit <- ifelse(grepl("[0-9]{4}-[0-9]{2}", x$Time), "Month", x$TimeUnit)
-  x$TimeUnit <- ifelse(grepl("[0-9]{4}-W[0-9]{2}", x$Time), "Week", x$TimeUnit)
+  x$TimeUnit <- ifelse(grepl("[0-9]{4}", x$Time),
+                       "Year", NA)
+  x$TimeUnit <- ifelse(grepl("[0-9]{4}-[0-9]{2}", x$Time),
+                       "Month", x$TimeUnit)
+  x$TimeUnit <- ifelse(grepl("[0-9]{4}-W[0-9]{2}", x$Time),
+                       "Week", x$TimeUnit)
 
 
   #-- Formating Date variables
-  x$TimeYear <- ifelse(x$TimeUnit == "Year", as.numeric(substr(x$Time, 1, 4)), NA)
-  x$TimeYear <- ifelse(x$TimeUnit == "Month", as.numeric(substr(x$Time, 1, 4)), x$TimeYear)
-  x$TimeYear <- ifelse(x$TimeUnit == "Week", as.numeric(substr(x$Time, 1, 4)), x$TimeYear)
-
-  x$TimeMonth <- ifelse(x$TimeUnit == "Month", as.numeric(substr(x$Time, 6, 8)), NA)
-
-  x$TimeWeek <- ifelse(x$TimeUnit == "Week", substr(x$Time, 7, 9), NA)
+  x$TimeYear <- ifelse(x$TimeUnit == "Year",
+                       as.numeric(substr(x$Time, 1, 4)), NA)
+  x$TimeYear <- ifelse(x$TimeUnit == "Month",
+                       as.numeric(substr(x$Time, 1, 4)), x$TimeYear)
+  x$TimeYear <- ifelse(x$TimeUnit == "Week",
+                       as.numeric(substr(x$Time, 1, 4)), x$TimeYear)
+  x$TimeMonth <- ifelse(x$TimeUnit == "Month",
+                        as.numeric(substr(x$Time, 6, 8)), NA)
+  x$TimeWeek <- ifelse(x$TimeUnit == "Week",
+                       substr(x$Time, 7, 9), NA)
 
 
   #-- Approximating the date
   x$TimeDate <- ifelse(x$TimeUnit == "Week",
                        paste(x$TimeYear, "-W", x$TimeWeek, "-1", sep = ""), NA)
   x$TimeDate <- ISOweek::ISOweek2date(x$TimeDate)
-  # Adjusting the month when weekly data
-  x$TimeMonth <- ifelse(x$TimeUnit == "Week", as.numeric(format(x$TimeDate, "%m")), x$TimeMonth)
 
+
+  #-- Adjusting the month when weekly data
+  x$TimeMonth <- ifelse(x$TimeUnit == "Week",
+                        as.numeric(format(x$TimeDate, "%m")), x$TimeMonth)
   x$TimeDate <- ifelse(x$TimeUnit == "Year",
-                       as.Date(paste(x$TimeYear, "01", "01", sep = "/"), "%Y/%m/%d"), x$TimeDate)
+                       as.Date(paste(x$TimeYear, "01", "01", sep = "/"), "%Y/%m/%d"),
+                       x$TimeDate)
   x$TimeDate <- ifelse(x$TimeUnit == "Month",
-                       as.Date(paste(x$TimeYear, x$TimeMonth, "01", sep = "/"), "%Y/%m/%d"), x$TimeDate)
+                       as.Date(paste(x$TimeYear, x$TimeMonth, "01", sep = "/"), "%Y/%m/%d"),
+                       x$TimeDate)
   x$TimeDate <- as.Date(x$TimeDate, origin = "1970-01-01")
 
 
@@ -135,20 +147,25 @@ studyPeriod <- function(input){
 
     Start <- as.Date(as.character(input$daterange[1]), "%Y-%m-%d")
     if (input$unit == "Month") {
-      Start <- as.Date( paste(substr(as.character(input$daterange[1]), 1, 7), "-01", sep="" ), "%Y-%m-%d")
+      Start <- as.Date(paste(substr(as.character(input$daterange[1]), 1, 7), "-01", sep="" ),
+                       "%Y-%m-%d")
     }
     End <- as.Date(as.character(input$daterange[2]), "%Y-%m-%d")
     StudyPeriod <- seq(Start, End, tolower(input$unit) )
 
+
     #--- Filtering on the study period
     if (input$unit == "Week") {
-      StudyPeriod <- dplyr::mutate(as.data.frame(StudyPeriod), Time = ISOweek::ISOweek(StudyPeriod))
+      StudyPeriod <- dplyr::mutate(as.data.frame(StudyPeriod),
+                                   Time = ISOweek::ISOweek(StudyPeriod))
     }
     if (input$unit == "Month") {
-      StudyPeriod <- dplyr::mutate(as.data.frame(StudyPeriod), Time = format(StudyPeriod, "%Y-%m"))
+      StudyPeriod <- dplyr::mutate(as.data.frame(StudyPeriod),
+                                   Time = format(StudyPeriod, "%Y-%m"))
     }
     if (input$unit == "Year") {
-      StudyPeriod <- dplyr::mutate(as.data.frame(StudyPeriod), Time = format(StudyPeriod, "%Y"))
+      StudyPeriod <- dplyr::mutate(as.data.frame(StudyPeriod),
+                                   Time = format(StudyPeriod, "%Y"))
     }
 
     return(StudyPeriod)
@@ -193,7 +210,7 @@ studyPeriod <- function(input){
 filterAtlasExport <- function(x, input, stratified){
 
   #--- Default value
-  if( missing(stratified) ) {
+  if (missing(stratified)) {
     stratified <- FALSE
   }
 
@@ -209,7 +226,7 @@ filterAtlasExport <- function(x, input, stratified){
   x <- dplyr::filter(x, x$Indicator == input$indicator)
 
   #--- Filtering on stratification level for not stratified reports
-  if( stratified == FALSE ) {
+  if (stratified == FALSE) {
     x <- dplyr::filter(x, x$Population == input$stratification)
   }
 
@@ -347,7 +364,7 @@ stsSD <- function(observedCases, studyPeriod, timeUnit = "Month", startYM = c(20
 
   if (timeUnit == "Month") {
     fq <- 12
-  } else if (timeUnit == "Week") {    #This is a proxy for the number of ISO weeks in a year
+  } else if (timeUnit == "Week") {  #This is a proxy for the number of ISO weeks in a year
     fq <- 52
   } else {
     fq <- 1
@@ -416,7 +433,8 @@ stsSD <- function(observedCases, studyPeriod, timeUnit = "Month", startYM = c(20
 #' @seealso \code{\link{stsSD}}
 #' @export
 
-algoSD <- function(x.sts, algo = "FarringtonFlexible", timeUnit = "Month", testingPeriod = 5){
+algoSD <- function(x.sts, algo = "FarringtonFlexible",
+                   timeUnit = "Month", testingPeriod = 5){
 
   #-- Retrieving algorithm parameters to use according to the selected time unit
   params <- EpiSignalDetection::AlgoParam[[algo]]
@@ -575,7 +593,8 @@ plotSD <- function(x, input, subRegionName, x.sts, x.algo){
   Max <- max(x.sts@observed, x.algo@upperbound, na.rm = TRUE)
   Xunit <- ifelse(input$unit == "Month", 1, 4)
 
-  graphics::par(xpd = TRUE, cex.main = 1.6, cex.axis = 1, las = 1, mar = c(7.1,4.1,4.1,2.1))
+  graphics::par(xpd = TRUE, cex.main = 1.6, cex.axis = 1,
+                las = 1, mar = c(7.1,4.1,4.1,2.1))
   graphics::plot( x.sts@observed[1:Historical],
                   ty = "l",
                   lwd = 2,
@@ -583,7 +602,8 @@ plotSD <- function(x, input, subRegionName, x.sts, x.algo){
                   xlim = c(1, length(x.sts@epoch)),
                   ylim = c(0, Max),
                   xaxt = "n", bty = "l", yaxs = "i", xaxs = "i",
-                  main = paste( input$disease, " (", tolower(input$indicator), ") ", tolower(input$stratification), " by ", tolower(input$unit),
+                  main = paste( input$disease, " (", tolower(input$indicator), ") ",
+                                tolower(input$stratification), " by ", tolower(input$unit),
                                 ",\n in ", subRegionName,
                                 " from ", input$daterange[1]," until ", input$daterange[2], sep=""),
                   xlab = "",

@@ -13,6 +13,7 @@ pkgLicense <- packageDescription("EpiSignalDetection")$License
 pkgUrl <- packageDescription("EpiSignalDetection")$URL
 
 ## ---- eval=FALSE, echo=TRUE----------------------------------------------
+#  install.packages("EpiSignalDetection")
 #  library(EpiSignalDetection)
 #  EpiSignalDetection::runEpiSDApp()
 
@@ -27,6 +28,22 @@ names(my_parameters)
 ## ------------------------------------------------------------------------
 knitr::kable(my_parameters$FarringtonFlexible, caption = "__Tab.2 Parameters for the Farrington Flexible algorithm__")
 knitr::kable(my_parameters$GLRNB, caption = "__Tab.3 Parameters for the GLRNB algorithm__")
+
+## ---- echo = FALSE, results = 'hide'-------------------------------------
+my_input <- list(
+  disease = "Salmonellosis",
+  country = "EU-EEA - complete series",
+  indicator = "Reported cases",
+  stratification = "Confirmed cases",
+  unit = "Month",
+  daterange = c("2012-01-01", "2016-12-31"),
+  algo = "FarringtonFlexible",
+  testingperiod = 5
+)
+
+png(file = "plots/plot_time_series.png", width = 1450, height = 500, res=90)
+EpiSignalDetection::plotSD(input = my_input)
+dev.off()
 
 ## ------------------------------------------------------------------------
 my_dataset <- EpiSignalDetection::SignalData
@@ -46,13 +63,6 @@ my_input <- list(
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  EpiSignalDetection::plotSD(input = my_input)
-
-## ---- echo = FALSE, results = 'hide'-------------------------------------
-
-png(file = "plots/plot_time_series.png", width = 1450, height = 500, res=90)
-EpiSignalDetection::plotSD(input = my_input)
-dev.off()
-  
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  EpiSignalDetection::runEpiSDReport(
