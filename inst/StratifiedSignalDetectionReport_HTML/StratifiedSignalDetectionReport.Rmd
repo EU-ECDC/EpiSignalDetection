@@ -139,8 +139,12 @@ datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
 
 
 # Study period: `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time)]`
-* __Historical data__: From `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
-* __Alarm detection period__: The last `r input$testingperiod` `r tolower(input$unit)`(s) of the study period: from `r TestingPeriod[input$testingperiod]` to  `r TestingPeriod[1]`.
+* __Historical data__: From `r StudyPeriod$Time[1]` 
+to `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
+* __Alarm detection period__: 
+The last `r input$testingperiod` `r tolower(input$unit)`(s) 
+of the study period: from `r TestingPeriod[input$testingperiod]` 
+to  `r TestingPeriod[1]`.
 * __Time unit__: `r input$unit`(s). 
 * __Signal detection algorithm__: `r input$algo`.
 * __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
@@ -151,8 +155,10 @@ datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
 
 # Alarm detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
 
-* There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` country(ies) reporting at least 1 case in the alarm detection period.
-* There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported in the alarm detection period, all strata added up.
+* There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` 
+country(ies) reporting at least 1 case in the alarm detection period.
+* There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported 
+in the alarm detection period, all strata added up.
 
 
 ```{r GraphByReportingCountries}
@@ -196,10 +202,13 @@ strata <- na.omit(unique(datasetTP$Population[datasetTP$NumValue>0]))
 ```
 
 
-* The selected strata are those with at least one reported case during the alarm detection period.
-* There are `r length(strata)` strata with at least one case in the alarm detection period: `r paste(strata, collapse = ", ")`.
+* The selected strata are those with at least one reported case during 
+the alarm detection period.
+* There are `r length(strata)` strata with at least one case 
+in the alarm detection period: `r paste(strata, collapse = ", ")`.
 
-In decreasing order of number of cases, the most frequent serotypes on the alarm detecion period are:
+In decreasing order of number of cases, the most frequent serotypes on 
+the alarm detecion period are:
 
 
 ```{r TableByStratum}
@@ -213,7 +222,8 @@ DT::datatable(tab,
                 autoWidth = FALSE,
                 dom = 't',
                 order = list(list(1, 'desc')),
-                columnDefs = list(list(className = 'dt-left', orderable = TRUE, targets = 1))),
+                columnDefs = list(
+                  list(className = 'dt-left', orderable = TRUE, targets = 1))),
               caption = "Table: Number of cases by stratum")
 
 ``` 
@@ -228,7 +238,7 @@ DT::datatable(tab,
 <a name="result_tables"></a>
 
 
-```{r LoopByCountry, eval = TRUE, results = 'hide'}
+```{r LoopByCountry, results = 'hide', fig.show = 'hide'}
 
 #--- Preparation of the result table that will be append through the following loop
 Result <- data.frame( Time = "" ,  
@@ -369,7 +379,7 @@ Result <- Result[-1,]
 ## By geographical level
 
 
-```{r AlarmTableByGeo, eval = TRUE, results = 'hide'}
+```{r AlarmTableByGeo, results = 'hide'}
 
 out=NULL
 
@@ -403,7 +413,7 @@ for(i in countries){
 ## By stratification level
 
 
-```{r AlarmTableByPop, eval = TRUE, results = 'hide'}
+```{r AlarmTableByPop, results = 'hide'}
 
 out=NULL
 
