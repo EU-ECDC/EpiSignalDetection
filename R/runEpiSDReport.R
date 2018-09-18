@@ -69,8 +69,7 @@ runEpiSDReport <- function(input, stratified, outputfile){
 
 
   if (missing(input)) {
-    print("Dataset (please enter the full path to the csv file,
-          or just press 'Enter' to use the default dataset)")
+    print("Dataset (please enter the full path to the csv file, or just press 'Enter' to use the default dataset)")
     try(datapath <- scan(what=as.character(c()), sep = ";", nlines = 1), silent=TRUE)
     if(length(datapath)==0){
       file <- NULL

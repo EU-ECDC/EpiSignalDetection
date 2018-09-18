@@ -90,14 +90,16 @@ The user interface of the Signal detection tool is made available once the `EpiS
 and by running the following commands in the R console:
 
 ```{r, eval=FALSE, echo=TRUE}
+install.packages("EpiSignalDetection")
 library(EpiSignalDetection)
 EpiSignalDetection::runEpiSDApp()
 ```
 
 At this moment, an external window will appear using the default browser (see print screen below):
 
-![__Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__](img/app_screenshot_20180806_cutright.PNG?raw=true "Fig.1")
+![__Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__](img/app_screenshot20180911.PNG?raw=true "Fig.1"){width=800px}
 
+The end user can then select the parameters of interest (e.g. Salmonellosis, EU-EEA complete series, Reported cases, etc.) and push the button `Run the analysis`.
 
 
 ### 1. Datasets to be used in the Epidemiological Signal Detection Tool
@@ -230,16 +232,42 @@ Doing this filters and aggregates if necessary the data, run the signal detectio
 
 ### 5. Time series graph
 
-The time series graph shows the number of cases aggregated by time unit. 
+The time series graph shows the number of cases aggregated by time unit over the study period. 
 
-It include:
+The study period includes:
 
-* the __historical data__ 
-* the __observed data__ during the alarm detection period 
-* the __threshold value__ computed by the algorithm
-* as well as the __alarms detected__ within the alarm detection period.
+* The __historical data__ (light green solid line):  
+The historical time series on which the signal detection algorithm forecast 
+will be based on (i.e. the estimation of the expected number of cases).
+* The alarm detection period including:
+    + The __observed cases__ (light green dashed line): 
+The actual number of cases reported during the alarm detection period (i.e. the forecast period).  
+    + The __threshold__ value computed by the algorithm (dark orange solid line): 
+The upper limit of the expected number of cases (i.e. forecast) estimated with the selected algorithm.
+    + The __alarms__ detected within the alarm detection period (red triangles): 
+Time points where the observed number of cases is higher than the threshold value 
+(i.e. the upper limit of the expected number of cases).
 
-The graph automatically updates when the "Run the analysis" button is pushed.
+The graph automatically updates when the `Run the analysis` button is pushed.
+
+```{r, echo = FALSE, results = 'hide'}
+my_input <- list(
+  disease = "Salmonellosis",
+  country = "EU-EEA - complete series",
+  indicator = "Reported cases",
+  stratification = "Confirmed cases",
+  unit = "Month",
+  daterange = c("2012-01-01", "2016-12-31"),
+  algo = "FarringtonFlexible",
+  testingperiod = 5
+)
+
+png(file = "plots/plot_time_series.png", width = 1450, height = 500, res=90)
+EpiSignalDetection::plotSD(input = my_input)
+dev.off()
+```
+
+![](plots/plot_time_series.png){width=800px}
 
 
 ### 6. Result table
@@ -321,14 +349,6 @@ If you use the default dataset `EpiSignalDetection::SignalData`, the only requir
 
 ```{r, eval = FALSE}
 EpiSignalDetection::plotSD(input = my_input)
-```
-
-```{r, echo = FALSE, results = 'hide'}
-
-png(file = "plots/plot_time_series.png", width = 1450, height = 500, res=90)
-EpiSignalDetection::plotSD(input = my_input)
-dev.off()
-  
 ```
 
 ![](plots/plot_time_series.png){width=800px}

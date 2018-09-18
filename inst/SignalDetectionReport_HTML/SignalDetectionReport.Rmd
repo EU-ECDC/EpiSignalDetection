@@ -123,17 +123,24 @@ datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
 
 
 # Study period: `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time)]`
-* __Historical data__: From `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
-* __Alarm detection period__: The last `r input$testingperiod` `r tolower(input$unit)`(s) of the study period: from `r TestingPeriod[input$testingperiod]` to  `r TestingPeriod[1]`.
+* __Historical data__: From `r StudyPeriod$Time[1]` to 
+`r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
+* __Alarm detection period__: The last `r input$testingperiod` 
+`r tolower(input$unit)`(s) of the study period: 
+from `r TestingPeriod[input$testingperiod]` 
+to  `r TestingPeriod[1]`.
 * __Time unit__: `r input$unit`(s). 
 * __Signal detection algorithm__: `r input$algo`.
-* __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
+* __Gaps in the time series__: 
+`r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
 
 
 # Alarm detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
 
-* There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported in the alarm detection period.
-* There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` country(ies) reporting at least 1 case in the alarm detection period.
+* There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported 
+in the alarm detection period.
+* There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` 
+country(ies) reporting at least 1 case in the alarm detection period.
 
 ```{r GraphByReportingCountries}
 if(input$country == "EU-EEA - complete series") {
@@ -167,7 +174,7 @@ if(input$country == "EU-EEA - complete series") {
 <a name="result_tables"></a>
 
 
-```{r LoopByCountry, eval = TRUE, results = 'hide'}
+```{r LoopByCountry, results = 'hide', fig.show = 'hide'}
 
 #--- Preparation of the result table that will be append through the following loop
 Result <- data.frame( Time = "" ,  
@@ -202,8 +209,9 @@ for(i in 1:length(countries)){
   dataset.sts <- EpiSignalDetection::stsSD(observedCases = dataset_1$NumValue,
                                            studyPeriod = dataset_1$StudyPeriod,
                                            timeUnit = input$unit,
-                                           startYM = c(as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%Y")),
-                                                       as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%m"))))
+                                           startYM = c(
+                                             as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%Y")),
+                                             as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%m"))))
   
   #-------------------------------------------------------
   #---- Detection algorithm
@@ -218,11 +226,15 @@ for(i in 1:length(countries)){
   #--- Saving the plot
   #-------------------------------
   
+  
   if (!file.exists(paste(tempPath, "\\plots", sep = ""))){
     dir.create(file.path(tempPath, "plots"))
   }
-  png(file=paste(tempPath, "/plots/", sub("/", "-", country), "_TimeSeries.png", sep = ""), width = 1450, height = 500, res=90)
-  EpiSignalDetection::plotSD(dataset_1, input, subRegionName = country, x.sts = dataset.sts, x.algo = dataset.algo)
+  dev.new()
+  png(file = paste(tempPath, "/plots/", sub("/", "-", country), "_TimeSeries.png", sep = ""), 
+      width = 1450, height = 500, res=90)
+  EpiSignalDetection::plotSD(dataset_1, input, subRegionName = country, 
+                             x.sts = dataset.sts, x.algo = dataset.algo)
   dev.off()
   
   #-------------------------------
@@ -231,13 +243,14 @@ for(i in 1:length(countries)){
   
   for(l in 1:(input$testingperiod)){
     Result <- rbind(Result,
-                    data.frame(Time = TestingPeriod[input$testingperiod +1 -l], #as.Date(Time$StudyPeriod[l])
+                    data.frame(Time = TestingPeriod[input$testingperiod +1 -l], 
                                Place = country,
                                Observed = as.character(dataset.algo@observed[l]),
                                Threshold.ALGO = as.character(round(dataset.algo@upperbound[l],0)),
-                               ALGO = ifelse(dataset.algo@alarm[l],"<span style=\"color:#DD4814\">Alarm</span>","no")
-                               # Graph = paste("<a href=\"", tempPath,"/htmlpages/", country,".html\"> Link to figure<//a> ", sep = "")
-                               
+                               ALGO = ifelse(dataset.algo@alarm[l],
+                                             "<span style=\"color:#DD4814\">Alarm</span>",
+                                             "no")
+ 
                     )
     )
   } 
@@ -250,6 +263,7 @@ Result <- Result[-1,]
 
 
 `r paste(out, collapse='\n')`
+
 
 
 ```{r AlarmTable, results = 'hide'}

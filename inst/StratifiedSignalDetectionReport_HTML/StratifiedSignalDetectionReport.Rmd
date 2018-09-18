@@ -13,15 +13,17 @@ output:
 params:
   file : NULL
   disease: "Salmonellosis"
-  country: "EU-EEA - complete series"
+  country: "Greece"
   indicator: "Reported cases"
   stratification: "Confirmed cases"
   unit: "Month"
   daterange: !r c("2010-01-01", "2016-12-31")
-  algo: "FarringtonFlexible"
-  testingperiod: !r 3
+  algo: "GLRNB"
+  testingperiod: !r 6
   tempPath: !r tempdir()
 ---
+
+
 
 
 
@@ -40,6 +42,7 @@ knitr::knit_hooks$set(inline = function(x) {
   format(x, big.mark=",")
 })
 
+
 ##******************************************************************************
 ## Definition of the main color of graphs and table
 ##******************************************************************************
@@ -50,8 +53,10 @@ maincolor="#69AE23"
 ##******************************************************************************
 ## Libraries
 ##******************************************************************************
+
 library(ggplot2)
 library(dplyr)
+
 ```
 
 
@@ -59,6 +64,7 @@ library(dplyr)
 
 
 ```{r Parameters}
+
 ## ~~~~~~~~~~~~~~~~
 ## Setting parameters
 ## ~~~~~~~~~~~~~~~~
@@ -81,7 +87,6 @@ input <- list(
   testingperiod = params$testingperiod
 )
 
-# tempPath <- tempdir()
 tempPath <- params$tempPath
 
 #--- Filtering on country, stratification and time unit
@@ -90,16 +95,24 @@ dataset <- EpiSignalDetection::filterAtlasExport(dataset, input, stratified = TR
 ```
 
 
-```{r StudyPeriod}
+
+
+
+```{r StudyPeriodDefinition}
+
 #--- Defining the study period
 StudyPeriod <- EpiSignalDetection::studyPeriod(input)
-#--- Defining the testing period period
-TestingPeriod <- StudyPeriod$Time[length(StudyPeriod$Time):(length(StudyPeriod$Time) - input$testingperiod + 1)]
 
+#--- Defining the testing period period
+TestingPeriod <- StudyPeriod$Time[length(StudyPeriod$Time):(length(StudyPeriod$Time) 
+                                                            - input$testingperiod + 1)]
 ```
 
 
-```{r Gaps}
+
+
+
+```{r GapsDefinition}
 
 #-- Excluding countries with gaps and EU pre-computed values from the TS
 excluded <- unique(dataset$RegionName[ is.na(dataset$NumValue) ])
@@ -115,6 +128,7 @@ if (input$country == "EU-EEA - complete series") {
   warning("The selected country presents with at least one gap in the time series")
 }
 
+
 #-- Dataset for the testing period (TP) only
 datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
 
@@ -122,21 +136,33 @@ datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
 
 
 
+
+
 # Study period: `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time)]`
-* __Historical data__: From `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
-* __Alarm detection period__: The last `r input$testingperiod` `r tolower(input$unit)`(s) of the study period: from `r TestingPeriod[input$testingperiod]` to  `r TestingPeriod[1]`.
+* __Historical data__: From `r StudyPeriod$Time[1]` 
+to `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
+* __Alarm detection period__: 
+The last `r input$testingperiod` `r tolower(input$unit)`(s) 
+of the study period: from `r TestingPeriod[input$testingperiod]` 
+to  `r TestingPeriod[1]`.
 * __Time unit__: `r input$unit`(s). 
 * __Signal detection algorithm__: `r input$algo`.
 * __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
 
 
+
+
+
 # Alarm detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
 
-* There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` country(ies) reporting at least 1 case in the alarm detection period.
-* There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported in the alarm detection period, all strata added up.
+* There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` 
+country(ies) reporting at least 1 case in the alarm detection period.
+* There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported 
+in the alarm detection period, all strata added up.
 
 
 ```{r GraphByReportingCountries}
+
 if(input$country == "EU-EEA - complete series") {
   
   datasetByCountry <- datasetTP %>%
@@ -157,25 +183,33 @@ if(input$country == "EU-EEA - complete series") {
           panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank()) 
   p
-  
 }
 
-
 ```
+
+
+
+
 
 # Stratification variable
 
 This report is stratified according to the stratification variable 'Population'.
 
+
 ```{r}
 strata <- na.omit(unique(datasetTP$Population[datasetTP$NumValue>0]))
+
 ```
 
 
-* The selected strata are those with at least one reported case during the alarm detection period.
-* There are `r length(strata)` strata with at least one case in the alarm detection period: `r paste(strata, collapse = ", ")`.
+* The selected strata are those with at least one reported case during 
+the alarm detection period.
+* There are `r length(strata)` strata with at least one case 
+in the alarm detection period: `r paste(strata, collapse = ", ")`.
 
-In decreasing order of number of cases, the most frequent serotypes on the alarm detecion period are:
+In decreasing order of number of cases, the most frequent serotypes on 
+the alarm detecion period are:
+
 
 ```{r TableByStratum}
 tab <- tapply(datasetTP$NumValue, datasetTP$Population, sum)
@@ -188,21 +222,23 @@ DT::datatable(tab,
                 autoWidth = FALSE,
                 dom = 't',
                 order = list(list(1, 'desc')),
-                columnDefs = list(list(className = 'dt-left', orderable = TRUE, targets = 1))),
+                columnDefs = list(
+                  list(className = 'dt-left', orderable = TRUE, targets = 1))),
               caption = "Table: Number of cases by stratum")
-
 
 ``` 
 
 
 
 
+
 # Signal detection: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+
 
 <a name="result_tables"></a>
 
 
-```{r LoopByCountry, eval = TRUE, results = 'hide'}
+```{r LoopByCountry, results = 'hide', fig.show = 'hide'}
 
 #--- Preparation of the result table that will be append through the following loop
 Result <- data.frame( Time = "" ,  
@@ -238,7 +274,8 @@ for(i in 1:length(countries)){
   for(j in 1:length(strata)){
     stratum = strata[j]
     
-    dataset_1 = dplyr::filter(dataset, RegionName == country & Population == stratum)
+    dataset_1 = dplyr::filter(dataset, 
+                              RegionName == country & Population == stratum)
     
     if(nrow(dataset_1) != 0) {
       
@@ -249,8 +286,11 @@ for(i in 1:length(countries)){
       dataset.sts <- EpiSignalDetection::stsSD(observedCases = dataset_1$NumValue,
                                                studyPeriod = dataset_1$StudyPeriod,
                                                timeUnit = input$unit,
-                                               startYM = c(as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%Y")),
-                                                           as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%m"))))
+                                               startYM = c(
+                                                 as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%Y")),
+                                                 as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%m"))
+                                                 )
+                                               )
       
       #-------------------------------------------------------
       #---- Detection algorithm
@@ -266,21 +306,60 @@ for(i in 1:length(countries)){
       #--- Incrementation of the Result table
       #------------------------------- 
       
-      for(l in 1:(input$testingperiod)){
-        Result <- rbind(Result,
-                        data.frame(Time = TestingPeriod[input$testingperiod +1 -l], #as.Date(Time$StudyPeriod[l])
-                                   Place = country,
-                                   Stratum = stratum,
-                                   Observed = as.character(dataset.algo@observed[l]),
-                                   Threshold.ALGO = as.character(round(dataset.algo@upperbound[l],0)),
-                                   ALGO = ifelse(dataset.algo@alarm[l],"<span style=\"color:#DD4814\">Alarm</span>","no"),
-                                   Ranking = round( dataset.algo@control$score[l], 2 ),
-                                   p.value = ifelse( dataset.algo@control$pvalue[l] < 0.00001,
-                                                     "<0.00001", 
-                                                     as.character( round(dataset.algo@control$pvalue[l],5)))
-                        )
-        )
+      if(input$algo == "FarringtonFlexible") {
+        for(l in 1:(input$testingperiod)){
+          Result <- rbind(Result,
+                          data.frame(Time = TestingPeriod[input$testingperiod +1 -l],
+                                     Place = country,
+                                     Stratum = stratum,
+                                     Observed = as.character(dataset.algo@observed[l]),
+                                     Threshold.ALGO = as.character(round(dataset.algo@upperbound[l],0)),
+                                     ALGO = ifelse(dataset.algo@alarm[l],
+                                                   "<span style=\"color:#DD4814\">Alarm</span>",
+                                                   "no"),
+                                     Ranking = round(dataset.algo@control$score[l], 2 ),
+                                     p.value = ifelse(dataset.algo@control$pvalue[l] < 0.00001,
+                                                      "<0.00001", 
+                                                      as.character( round(dataset.algo@control$pvalue[l],5)))
+                          )
+          )
+        }
       }
+      
+      if(input$algo == "GLRNB") {
+        
+        # --- Special treat for GLRNB because:
+        # --- Exceedance score and pvalue are not available in surveillance 1.16.2
+        # --- for GLRNB function.
+        # --- Need to compute expected number of cases and  exeedance score:
+        observed <- dataset.algo@observed
+        expected <- dataset.algo@control$mu0
+        threshold <- dataset.algo@upperbound
+        ranking <- ((observed - expected) / (threshold - expected))
+        pvalue <- "Not avalaible in the current version"
+        # ---
+        
+        for(l in 1:(input$testingperiod)){
+          Result <- rbind(Result,
+                          data.frame(Time = TestingPeriod[input$testingperiod +1 -l],
+                                     Place = country,
+                                     Stratum = stratum,
+                                     Observed = as.character(observed[l]),
+                                     Threshold.ALGO = as.character(round(threshold[l],0)),
+                                     ALGO = ifelse(dataset.algo@alarm[l],
+                                                   "<span style=\"color:#DD4814\">Alarm</span>",
+                                                   "no"),
+                                     Ranking = round(ranking[l], 2 ),
+                                     p.value = pvalue
+                                     # p.value = ifelse(dataset.algo@control$pvalue[l] < 0.00001,
+                                     #                  "<0.00001", 
+                                     #                  as.character( round(dataset.algo@control$pvalue[l],5)))
+                          )
+          )
+        }
+      }
+      
+
     }
     
   }
@@ -290,14 +369,17 @@ Result <- Result[-1,]
 
 ```
 
+
 `r paste(out, collapse='\n')`
+
+
 
 
 
 ## By geographical level
 
 
-```{r AlarmTableByGeo, eval = TRUE, results = 'hide'}
+```{r AlarmTableByGeo, results = 'hide'}
 
 out=NULL
 
@@ -321,12 +403,17 @@ for(i in countries){
 
 ```
 
+
 `r paste(out, collapse='\n')`
+
+
+
 
 
 ## By stratification level
 
-```{r AlarmTableByPop, eval = TRUE, results = 'hide'}
+
+```{r AlarmTableByPop, results = 'hide'}
 
 out=NULL
 
@@ -348,5 +435,9 @@ for(i in strata){
 
 ```
 
+
 `r paste(out, collapse='\n')`
+
+
+
 
