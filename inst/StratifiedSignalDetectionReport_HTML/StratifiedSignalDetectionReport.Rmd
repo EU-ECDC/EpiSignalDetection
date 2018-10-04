@@ -153,7 +153,8 @@ to  `r TestingPeriod[1]`.
 
 
 
-# Alarm detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+# Overview cases reported in the signal detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+
 
 * There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` 
 country(ies) reporting at least 1 case in the alarm detection period.
