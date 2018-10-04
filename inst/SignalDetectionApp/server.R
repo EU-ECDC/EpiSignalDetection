@@ -498,7 +498,7 @@ shinyServer(function(input, output, session) {
 
     Result <- Result[-1, ]
     row.names(Result) <- NULL
-    names(Result) <- c(paste("Time (agg. by ", tolower(input$unit), ")", sep = ""),
+    names(Result) <- c(paste("Time ( by ", tolower(input$unit), ")", sep = ""),
                        "Place",
                        "Reported cases",
                        "Threshold value",
