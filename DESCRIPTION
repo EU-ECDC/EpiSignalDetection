@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Lore Merdrignac
 Maintainer: Lore Merdrignac <l.merdrignac@epiconcept.fr>
 Description: The EpiSignalDetection package allows to explore time series for signal detection. 
-    It is specifically designed to detect outbreaks for infectious disease surveillance data at EU/EEA or country level.
+    It is specifically designed to detect possible outbreaks using infectious disease surveillance data at EU/EEA or country level.
     The package includes:
     - An interactive Shiny application in which the user can import external data and perform basic signal detection analysis;
     - An automated report in HTML format, presenting the results of the time series analysis in tables and graphs 
