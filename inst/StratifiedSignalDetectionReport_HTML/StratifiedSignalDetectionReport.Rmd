@@ -122,10 +122,10 @@ if (input$country == "EU-EEA - complete series") {
   if (length(included) != 0) {
     dataset <- dplyr::filter(dataset, dataset$RegionName %in% included )
   } else {
-    warning("All countries present with at least one gap in the time series")
+    warning("All countries present with at least one gmissing value in the time series")
   }
 } else if (length(excluded) !=0) {
-  warning("The selected country presents with at least one gap in the time series")
+  warning("The selected country presents with at least one missing value in the time series")
 }
 
 
@@ -147,7 +147,7 @@ of the study period: from `r TestingPeriod[input$testingperiod]`
 to  `r TestingPeriod[1]`.
 * __Time unit__: `r input$unit`(s). 
 * __Signal detection algorithm__: `r input$algo`.
-* __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
+* __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one missing value in the time series:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one missing value in the time series", "None" )))`.
 
 
 
