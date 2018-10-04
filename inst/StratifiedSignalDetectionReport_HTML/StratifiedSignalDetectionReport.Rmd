@@ -201,7 +201,8 @@ if(input$country == "EU-EEA - complete series") {
 
 # Stratification variable
 
-This report is stratified according to the stratification variable 'Population'.
+This report is stratified according to the data entered in the variable 'Population'.
+
 
 
 ```{r}
