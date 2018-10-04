@@ -1,5 +1,5 @@
 ---
-title: "Report of alarms" 
+title: "Report of signals" 
 subtitle: " `r params$disease` - `r params$stratification` -  in `r params$country` (`r params$indicator`) "
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
@@ -125,7 +125,7 @@ datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
 # Study period: `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time)]`
 * __Historical data__: From `r StudyPeriod$Time[1]` to 
 `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
-* __Alarm detection period__: The last `r input$testingperiod` 
+* __Signal detection period__: The last `r input$testingperiod` 
 `r tolower(input$unit)`(s) of the study period: 
 from `r TestingPeriod[input$testingperiod]` 
 to  `r TestingPeriod[1]`.
@@ -135,12 +135,12 @@ to  `r TestingPeriod[1]`.
 `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
 
 
-# Alarm detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+# Signal detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
 
 * There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported 
-in the alarm detection period.
+in the signal detection period.
 * There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` 
-country(ies) reporting at least 1 case in the alarm detection period.
+country(ies) reporting at least 1 case in the signal detection period.
 
 ```{r GraphByReportingCountries}
 if(input$country == "EU-EEA - complete series") {
@@ -153,7 +153,7 @@ if(input$country == "EU-EEA - complete series") {
   p <- ggplot(datasetByCountry, aes(x = RegionName, y = NumValue)) +
     geom_bar(stat = "identity", fill = maincolor) +
     scale_y_continuous(expand = c(0,0)) +
-    labs(title = "Graph: Number of cases observed by country in the alarm detection period", 
+    labs(title = "Graph: Number of cases observed by country in the signal detection period", 
          x = "Reporting country", y = "Number of cases") +
     theme(title = element_text(size = 14), 
           axis.text = element_text(size = 12),
@@ -248,7 +248,7 @@ for(i in 1:length(countries)){
                                Observed = as.character(dataset.algo@observed[l]),
                                Threshold.ALGO = as.character(round(dataset.algo@upperbound[l],0)),
                                ALGO = ifelse(dataset.algo@alarm[l],
-                                             "<span style=\"color:#DD4814\">Alarm</span>",
+                                             "<span style=\"color:#DD4814\">Signal</span>",
                                              "no")
  
                     )
@@ -271,13 +271,13 @@ Result <- Result[-1,]
 out=NULL
 
 for(i in countries){  
-  Result_c <- dplyr::filter(Result, Place == i & grepl("Alarm", ALGO))
+  Result_c <- dplyr::filter(Result, Place == i & grepl("Signal", ALGO))
   row.names(Result_c) <- NULL
   names(Result_c) <- c(paste("Time (agg. by ", tolower(input$unit), ")", sep = ""),
                        "Place",
                        "Reported cases",
                        "Threshold value",
-                       "Alarm")
+                       "Signal")
   
   out <- c(out,knitr::knit_child('subsection.Rmd'))
   
