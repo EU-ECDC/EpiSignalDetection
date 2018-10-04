@@ -395,7 +395,7 @@ out=NULL
 for(i in countries){  
   Result_c <- dplyr::filter(Result, Place == i & grepl("Alarm", ALGO))
   row.names(Result_c) <- NULL
-  names(Result_c) <- c(paste("Time (agg. by ", tolower(input$unit), ")", sep = ""),
+  names(Result_c) <- c(paste("Time ( by ", tolower(input$unit), ")", sep = ""),
                        "Place",
                        "Stratum",
                        "Reported cases",
