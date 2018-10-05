@@ -213,11 +213,12 @@ The _Time settings_ panel includes the selection of:
 * __Time unit__, please note that the tool handles weekly and monthly data. For weekly aggregation, we use ISO8601-week.
 * __Study period__. The default value is set to the most recent 5 years data available in the dataset. The minimum and the maximum are set to the full range of the time variable available in the dataset.
 The user can either type each date or use the calendar to define the start and the end of the study period (see Fig.5).
+![__Fig.5 Calendar parameter__](img/calendar.PNG?raw=true "Fig.5 Calendar parameter")
+
 * __Signal detection period__. The default value of the signal detection period is:
     + 3 months out of 12 if time unit is "Month"
     + 6 weeks out of 53 if time unit is "Week".
     
-![__Fig.5 Calendar parameter__](img/calendar.PNG?raw=true "Fig.5 Calendar parameter")
 
 The _Signal detection algorithm_ panel allows to choose between the algorithms from the `surveillance` package available in the tool:
 
