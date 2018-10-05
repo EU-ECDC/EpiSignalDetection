@@ -219,8 +219,6 @@ The user can either type each date or use the calendar to define the start and t
     + 3 months out of 12 if time unit is "Month"
     + 6 weeks out of 53 if time unit is "Week".
     
-
-
 The _Signal detection algorithm_ panel allows to choose between the algorithms from the `surveillance` package available in the tool:
 
 * __Statistical algorithm__ using the parameters as defined in `EpiSignalDetection::AlgoParam` (see Tab.2 and Tab.3 above).
