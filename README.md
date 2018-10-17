@@ -13,3 +13,5 @@ The package includes:
 ![__Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__](vignettes/img/app_screenshot_20180806.PNG?raw=true "Fig.1 Signal detection tool for monitoring infectious diseases in TESSy")
 
 ![__Fig.2 Report of alarms__](vignettes/img/report_screenshot_20180806.PNG?raw=true "Fig.2 Report of alarms")
+
+
