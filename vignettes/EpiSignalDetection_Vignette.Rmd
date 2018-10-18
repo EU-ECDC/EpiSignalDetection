@@ -10,6 +10,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+
+<style>
+  .myTable td {
+    width: 400px;
+  }
+</style>
+
+
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -96,7 +105,8 @@ EpiSignalDetection::runEpiSDApp()
 
 At this moment, an external window will appear using the default browser (see print screen below):
 
-![__Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__](img/app_screenshot20180911.PNG?raw=true "Fig.1"){width=800px}
+![__Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__](img/app_screenshot20181018.PNG?raw=true "Fig.1")
+
 
 The end user can then select the parameters of interest (e.g. Salmonellosis, EU-EEA complete series, Reported cases, etc.) and push the button `Run the analysis`.
 
@@ -124,8 +134,30 @@ Three types of datasets can be used in the tool:
 
 ```{r, echo=FALSE, results='asis'}
 my_dataset <- EpiSignalDetection::importAtlasExport("./data/ECDC_surveillance_data_Pertussis_20180717.csv")
-knitr::kable(head(my_dataset), caption = "__Tab.1 Example of Pertussis data exported from the ECDC Atlas__")
+knitr::kable(head(my_dataset), 
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.1 Example of Pertussis data exported from the ECDC Atlas__")
 ```
+
+
+
+
+```{r, echo=FALSE, results='asis'}
+my_dataset <- EpiSignalDetection::SignalData
+my_dataset <- dplyr::filter(my_dataset, my_dataset$HealthTopic == "Salmonellosis")
+my_dataset <- dplyr::group_by_(my_dataset, c("Population") )
+my_dataset <- dplyr::summarise(my_dataset, "NumValue" = sum(NumValue, na.rm = TRUE))
+my_dataset <- dplyr::ungroup(my_dataset)
+my_dataset <- dplyr::arrange(my_dataset, desc(my_dataset$NumValue))
+knitr::kable(my_dataset,
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.2 Number of cases in each stratum using Salmonellosis data exported from the ECDC Atlas__")
+```
+
 
 #### Time units available in the tool
 
@@ -178,9 +210,17 @@ The specific values of the parameters used for each algorithm function are set a
 my_parameters <- EpiSignalDetection::AlgoParam
 names(my_parameters)
 ```
-```{r}
-knitr::kable(my_parameters$FarringtonFlexible, caption = "__Tab.2 Parameters for the Farrington Flexible algorithm__")
-knitr::kable(my_parameters$GLRNB, caption = "__Tab.3 Parameters for the GLRNB algorithm__")
+```{r, echo = FALSE}
+knitr::kable(my_parameters$FarringtonFlexible, 
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.3 Parameters for the Farrington Flexible algorithm__")
+knitr::kable(my_parameters$GLRNB, 
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.4 Parameters for the GLRNB algorithm__")
 ```
 
 
@@ -190,14 +230,14 @@ knitr::kable(my_parameters$GLRNB, caption = "__Tab.3 Parameters for the GLRNB al
 The selection fields for parameters are located on the left-hand side of the application and are organised hierarchically (see Fig.1).
 
 Each parameter has a default value. 
-However, values available in the dropdown menus are hierarchically updated according to the previous parameter selection (see workflow described in Fig.3 below). 
+However, values available in the dropdown menus are hierarchically updated according to the previous parameter selection (see workflow described in Fig.2 below). 
 
-![__Fig.3 Workflow of panel update__](img/workflow.PNG?raw=true "Fig.3 Workflow of panel update")
+![__Fig.2 Workflow of panel update__](img/workflow.PNG?raw=true "Fig.2 Workflow of panel update")
 
 In all dropdown boxes, the user can also choose to type in the values themselves - 
-or start typing and select from options, rather than select from the dropdown menu (see Fig.4).
+or start typing and select from options, rather than select from the dropdown menu (see Fig.3).
 
-![__Fig.4 Dropdown boxes__](img/dropdown-menu.PNG?raw=true "Fig.4 Dropdown boxes")
+![__Fig.3 Dropdown boxes__](img/dropdown-menu.PNG?raw=true "Fig.3 Dropdown boxes")
 
 In the first panel _Dataset selection_, user need to specify on which dataset to work on. 
 The dropdown menus will display all values available in the given dataset:
@@ -212,16 +252,21 @@ The _Time settings_ panel includes the selection of:
 
 * __Time unit__, please note that the tool handles weekly and monthly data. For weekly aggregation, we use ISO8601-week.
 * __Study period__. The default value is set to the most recent 5 years data available in the dataset. The minimum and the maximum are set to the full range of the time variable available in the dataset.
-The user can either type each date or use the calendar to define the start and the end of the study period (see Fig.5).
-![__Fig.5 Calendar parameter__](img/calendar.PNG?raw=true "Fig.5 Calendar parameter")
+The user can either type each date or use the calendar to define the start and the end of the study period (see Fig.4).
+
+![__Fig.4 Calendar parameter__](img/calendar.PNG?raw=true "Fig.4 Calendar parameter")
 
 * __Signal detection period__. The default value of the signal detection period is:
     + 3 months out of 12 if time unit is "Month"
-    + 6 weeks out of 53 if time unit is "Week".
+    + 13 weeks out of 53 if time unit is "Week".
+
+
+![__Fig.5 Signal detection period__](img/time.PNG?raw=true "Fig.5 Signal detection period")
+
     
 The _Signal detection algorithm_ panel allows to choose between the algorithms from the `surveillance` package available in the tool:
 
-* __Statistical algorithm__ using the parameters as defined in `EpiSignalDetection::AlgoParam` (see Tab.2 and Tab.3 above).
+* __Statistical algorithm__ using the parameters as defined in `EpiSignalDetection::AlgoParam` (see Tab.3 and Tab.4 above).
 
 
 ### 4. 'Run the analysis' button
