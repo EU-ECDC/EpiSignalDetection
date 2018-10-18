@@ -13,7 +13,7 @@ output:
 params:
   file : NULL
   disease: "Salmonellosis"
-  country: "Greece"
+  country: "EU-EEA - complete series"
   indicator: "Reported cases"
   stratification: "Confirmed cases"
   unit: "Month"
@@ -150,13 +150,15 @@ if(input$country == "EU-EEA - complete series") {
     dplyr::summarise( NumValue = sum(NumValue)  ) %>%
     dplyr::ungroup()
  
-#--- Sort by number cases by countries 
+#--- Sort by number cases by countries
   datasetByCountry <- datasetByCountry %>%
-    dplyr::mutate(RegionName = factor(RegionName, levels = datasetByCountry[order(datasetByCountry$NumValue), "RegionName"]))
+    dplyr::arrange(NumValue) %>%
+    dplyr::mutate(RegionName = factor(datasetByCountry$RegionName, levels = datasetByCountry$RegionName))
 
   p <- ggplot(datasetByCountry, aes(x = RegionName, y = NumValue)) +
     geom_bar(stat = "identity", fill = maincolor) +
-    scale_y_continuous(expand = c(0,0)) + + coord_flip() +
+    scale_y_continuous(expand = c(0,0)) + 
+    coord_flip() +
     labs(title = "Graph: Number of cases observed by country in the signal detection period", 
          x = "Reporting country", y = "Number of cases") +
     theme(title = element_text(size = 14), 
