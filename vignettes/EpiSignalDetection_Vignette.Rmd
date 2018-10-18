@@ -107,6 +107,7 @@ At this moment, an external window will appear using the default browser (see pr
 
 ![__Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__](img/app_screenshot20181018.PNG?raw=true "Fig.1")
 
+
 The end user can then select the parameters of interest (e.g. Salmonellosis, EU-EEA complete series, Reported cases, etc.) and push the button `Run the analysis`.
 
 
