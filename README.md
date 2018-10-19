@@ -15,4 +15,4 @@ The package includes:
 ![__Fig.2 Report of alarms__](vignettes/img/report_screenshot_20180806.PNG?raw=true "Fig.2 Report of alarms")
 
 
-**test**
+

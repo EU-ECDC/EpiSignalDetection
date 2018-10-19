@@ -310,7 +310,7 @@ aggAtlasExport <- function(x, input){
   x <-  dplyr::group_by_(x, c("StudyPeriod") )
   x <-  dplyr::summarise(x,
                          "CasesByCountry" = paste(RegionName, " (", NumValue, ")", sep = "", collapse = ", "),
-                         "NumValue" = sum(NumValue)  )
+                         "NumValue" = sum(NumValue, na.rm = TRUE)  )
   x <-  dplyr::ungroup(x)
 
   x <- dplyr::arrange(x, x$StudyPeriod)
