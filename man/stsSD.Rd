@@ -49,4 +49,8 @@ dataset.sts <- stsSD(observedCases = dataset$NumValue,
                      timeUnit = input$unit,
                      startYM = c(as.numeric(format(as.Date(input$daterange[1], "\%Y-\%m-\%d"), "\%Y")),
                                  as.numeric(format(as.Date(input$daterange[1], "\%Y-\%m-\%d"), "\%m"))))
+
+}
+\seealso{
+\code{\link{aggAtlasExport}} \code{\link{algoSD}}
 }
