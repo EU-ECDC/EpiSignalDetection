@@ -7,22 +7,53 @@
 runEpiSDReport(input, stratified, outputfile)
 }
 \arguments{
-\item{input}{list of parameters from the Signal Detection Application
-(i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))
+\item{input}{list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+
+(i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})
+
 (see also default parameters in
 \code{system.file("SignalDetectionReport_HTML", "SignalDetectionReport.Rmd", package = "EpiSignalDetection")})}
 
 \item{stratified}{a logical value indicating whether the report
-should be stratified by "Population" variable or not (default FALSE)}
+should be stratified by \code{Population} variable or not (default \code{FALSE})}
 
-\item{outputfile}{output file name (e.g. 'report.html')
-(default value is a temporary folder - file.path(tempdir(), "SignalDectectionReport.html"))}
+\item{outputfile}{output file name (e.g. \code{'C:/R/report.html'})
+
+(default value is a temporary folder - \code{file.path(tempdir(), "SignalDectectionReport.html")})}
 }
 \value{
 An HTML report
 }
 \description{
 Function to render the markdown report of alarms in HTML format for ECDC Signal Detection Report
+}
+\details{
+Datasets to use in the report:
+\itemize{
+  \item Default dataset included in the package
+  (Salmonellosis 2007-2016 or Measles 1999-2018 data) (i.e.  \code{input$file = NULL});
+  \item External dataset:
+  \itemize{
+    \item  --> An export (csv format) from the ECDC Surveillance Atlas of Infectious Diseases:
+     \href{http://atlas.ecdc.europa.eu/public/index.aspx}{http://atlas.ecdc.europa.eu/public/index.aspx}.
+
+On the ECDC "Surveillance Atlas of Infectious Diseases" web site:
+
+\itemize{
+      \item{1-} Choose the disease/health topic to analyse
+      \item{2-} Export the data (csv) using the default settings
+      \item{3-} Specify the location of this external dataset in the input
+      argument of the runEpiSDReport() function
+      (e.g.  \code{input <- list(file = list(datapath = "C:/Users/Downloads/ECDC_surveillance_data_Pertussis.csv"),
+      disease = "Pertussis", country = "Greece", indicator = "Reported cases",
+      stratification = "All cases", unit = "Month", daterange = c("2011-12-01", "2016-12-01"),
+      algo = "FarringtonFlexible", testingperiod = 3))}
+      \item{4-} You can now render the re markdown report...
+      (e.g.  \code{runEpiSDReport(input = input)})
+    }
+    \item --> Any dataset specified as described in the package vignette.
+ }
+}
 }
 \examples{
 #-- Running the report as a standalone function
@@ -64,10 +95,12 @@ algo = "FarringtonFlexible",
 testingperiod = 3
 )
 # runEpiSDReport(input = input, stratified = TRUE)
-        # !!GLRNB algo does not allow stratified reports for now
+
 
 
 }
 \seealso{
-\code{\link{SignalData}}
+Default dataset used in the report \code{\link{SignalData}}
+
+Signal Detection Application \code{\link{runEpiSDApp}}
 }

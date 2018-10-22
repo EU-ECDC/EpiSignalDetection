@@ -346,7 +346,7 @@ for(i in 1:length(countries)){
         expected <- dataset.algo@control$mu0
         threshold <- dataset.algo@upperbound
         ranking <- ((observed - expected) / (threshold - expected))
-        pvalue <- "Not avalaible in the current version"
+        pvalue <- "Not applicable"
         # ---
         
         for(l in 1:(input$testingperiod)){

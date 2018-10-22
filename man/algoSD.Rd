@@ -7,7 +7,7 @@
 algoSD(x.sts, algo = "FarringtonFlexible", timeUnit = "Month", testingPeriod = 5)
 }
 \arguments{
-\item{x.sts}{sts class object (see \link{stsSD} output)}
+\item{x.sts}{sts class object (see \code{\link{stsSD}} output)}
 
 \item{algo}{character string containing the name of the algorithm to use.
 Options are "FarringtonFlexible" (default) or "GLRNB".}
@@ -62,5 +62,5 @@ dataset.algo <- algoSD(dataset.sts,
 
 }
 \seealso{
-\code{\link{stsSD}}
+\code{\link{stsSD}} \code{\link{plotSD}}
 }
