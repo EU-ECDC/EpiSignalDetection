@@ -5,7 +5,7 @@ output:
   rmarkdown::html_vignette:
     toc: false
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{The 'Epidemiological Signal Detection' Package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -46,7 +46,13 @@ Package details below:
 ```{r, echo = FALSE}
 pkgVersion <- packageDescription("EpiSignalDetection")$Version
 pkgDate <- packageDescription("EpiSignalDetection")$Date
-authorsString <- packageDescription("EpiSignalDetection")$Author
+authorsString <- gsub("^ *|(?<= ) |\n| *$", "", 
+                      packageDescription("EpiSignalDetection")$Authors, perl = TRUE)
+authorList <- eval(parse(text = authorsString))
+pkgAuthors <- paste(format(authorList, 
+                           include = c("given", "family", "email", "comment"), 
+                           braces = list(email = c("<", ">,<br />"), comment = c("", ""))), 
+                    collapse = "<br /><br />")
 pkgMaintainer <- packageDescription("EpiSignalDetection")$Maintainer
 pkgLicense <- packageDescription("EpiSignalDetection")$License
 pkgUrl <- packageDescription("EpiSignalDetection")$URL
@@ -57,7 +63,7 @@ Package | Description
 ------- | -------------
 Version | `r pkgVersion`
 Published | `r pkgDate`
-Authors | `r gsub("\n", "<br>", authorsString)`
+Authors | `r pkgAuthors`
 Maintainer | `r pkgMaintainer`
 License | `r pkgLicense`
 Link to the ECDC Atlas | `r pkgUrl`
