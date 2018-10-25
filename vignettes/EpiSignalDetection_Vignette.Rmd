@@ -1,6 +1,6 @@
 ---
 title: "The 'Epidemiological Signal Detection' Package"
-author: "EpiConcept / European Centre for Disease Prevention and Control (ECDC)"
+author: "European Centre for Disease Prevention and Control (ECDC)"
 output: 
   rmarkdown::html_vignette:
     toc: false
