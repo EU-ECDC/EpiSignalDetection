@@ -7,7 +7,13 @@ knitr::opts_chunk$set(
 ## ---- echo = FALSE-------------------------------------------------------
 pkgVersion <- packageDescription("EpiSignalDetection")$Version
 pkgDate <- packageDescription("EpiSignalDetection")$Date
-authorsString <- packageDescription("EpiSignalDetection")$Author
+authorsString <- gsub("^ *|(?<= ) |\n| *$", "", 
+                      packageDescription("EpiSignalDetection")$Authors, perl = TRUE)
+authorList <- eval(parse(text = authorsString))
+pkgAuthors <- paste(format(authorList, 
+                           include = c("given", "family", "email", "comment"), 
+                           braces = list(email = c("<", ">,<br />"), comment = c("", ""))), 
+                    collapse = "<br /><br />")
 pkgMaintainer <- packageDescription("EpiSignalDetection")$Maintainer
 pkgLicense <- packageDescription("EpiSignalDetection")$License
 pkgUrl <- packageDescription("EpiSignalDetection")$URL
@@ -19,15 +25,40 @@ pkgUrl <- packageDescription("EpiSignalDetection")$URL
 
 ## ---- echo=FALSE, results='asis'-----------------------------------------
 my_dataset <- EpiSignalDetection::importAtlasExport("./data/ECDC_surveillance_data_Pertussis_20180717.csv")
-knitr::kable(head(my_dataset), caption = "__Tab.1 Example of Pertussis data exported from the ECDC Atlas__")
+knitr::kable(head(my_dataset), 
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.1 Example of Pertussis data exported from the ECDC Atlas__")
+
+## ---- echo=FALSE, results='asis'-----------------------------------------
+my_dataset <- EpiSignalDetection::SignalData
+my_dataset <- dplyr::filter(my_dataset, my_dataset$HealthTopic == "Salmonellosis")
+my_dataset <- dplyr::group_by_(my_dataset, c("Population") )
+my_dataset <- dplyr::summarise(my_dataset, "NumValue" = sum(NumValue, na.rm = TRUE))
+my_dataset <- dplyr::ungroup(my_dataset)
+my_dataset <- dplyr::arrange(my_dataset, desc(my_dataset$NumValue))
+knitr::kable(my_dataset,
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.2 Number of cases in each stratum using Salmonellosis data exported from the ECDC Atlas__")
 
 ## ------------------------------------------------------------------------
 my_parameters <- EpiSignalDetection::AlgoParam
 names(my_parameters)
 
-## ------------------------------------------------------------------------
-knitr::kable(my_parameters$FarringtonFlexible, caption = "__Tab.2 Parameters for the Farrington Flexible algorithm__")
-knitr::kable(my_parameters$GLRNB, caption = "__Tab.3 Parameters for the GLRNB algorithm__")
+## ---- echo = FALSE-------------------------------------------------------
+knitr::kable(my_parameters$FarringtonFlexible, 
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.3 Parameters for the Farrington Flexible algorithm__")
+knitr::kable(my_parameters$GLRNB, 
+             format = "html", table.attr = 'class="myTable"',
+             format.args = list(decimal.mark = ".", big.mark = ","),
+             align = 'c',
+             caption = "__Tab.4 Parameters for the GLRNB algorithm__")
 
 ## ---- echo = FALSE, results = 'hide'-------------------------------------
 my_input <- list(

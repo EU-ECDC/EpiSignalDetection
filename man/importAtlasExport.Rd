@@ -2,23 +2,31 @@
 % Please edit documentation in R/internal_functions.R
 \name{importAtlasExport}
 \alias{importAtlasExport}
-\title{Import ECDC Atlas export csv file}
+\title{Import ECDC Atlas export file (csv)}
 \usage{
 importAtlasExport(x)
 }
 \arguments{
 \item{x}{file name of a csv file, export from the ECDC Atlas
-(e.g. x = 'ECDC_surveillance_data_Anthrax.csv')}
+
+(e.g. \code{x = 'ECDC_surveillance_data_Anthrax.csv'})}
 }
 \value{
 dataframe
 }
 \description{
-Import ECDC Atlas csv file that you can export
-from the online ECDC Atlas: http://atlas.ecdc.europa.eu/public/index.aspx
-e.g. ECDC_surveillance_data_Anthrax.csv \cr
-dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+Import ECDC Atlas csv export file \cr
+(exported from the online ECDC Atlas:
+\href{http://atlas.ecdc.europa.eu/public/index.aspx}{http://atlas.ecdc.europa.eu/public/index.aspx}) \cr
+e.g. "ECDC_surveillance_data_Anthrax.csv" \cr
 }
 \details{
 The function will interpret missing reports '-' as NA values
+}
+\examples{
+# dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+
+}
+\seealso{
+\code{\link{cleanAtlasExport}}
 }

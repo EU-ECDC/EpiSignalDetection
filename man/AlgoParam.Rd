@@ -53,7 +53,7 @@
 
 }}
 \usage{
-data(AlgoParam)
+AlgoParam
 }
 \description{
 A list including two datasets containing the parameters used for Farrington Flexible and for GLRNB

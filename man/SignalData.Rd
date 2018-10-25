@@ -25,7 +25,7 @@
 \url{http://atlas.ecdc.europa.eu/public/index.aspx}
 }
 \usage{
-data(SignalData)
+SignalData
 }
 \description{
 A dataset containing an export from the ECDC Atlas for salmonellosis and measles data.

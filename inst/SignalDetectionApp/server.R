@@ -117,8 +117,8 @@ shinyServer(function(input, output, session) {
       session,
       inputId = "testingperiod",
       label = ifelse(input$unit == "Month",
-                     "Alarm detection period: number of months to test for signal detection",
-                     "Alarm detection period: number of weeks to test for signal detection"),
+                     "Signal detection period: number of months to test for signal detection",
+                     "Signal detection period: number of weeks to test for signal detection"),
       min = 1,
       max = ifelse(input$unit == "Month", 12, 53),
       value = ifelse(input$unit == "Month", 3, 13)
@@ -177,8 +177,8 @@ shinyServer(function(input, output, session) {
       session,
       inputId = "testingperiod",
       label = ifelse(input$unit == "Month",
-                     "Alarm detection period: number of months to test for signal detection",
-                     "Alarm detection period: number of weeks to test for signal detection"),
+                     "Signal detection period: number of months to test for signal detection",
+                     "Signal detection period: number of weeks to test for signal detection"),
       min = 1,
       max = ifelse(input$unit == "Month", 12, 53),
       value = ifelse(input$unit == "Month", 3, 13)
@@ -234,8 +234,8 @@ shinyServer(function(input, output, session) {
       session,
       inputId = "testingperiod",
       label = ifelse(input$unit == "Month",
-                     "Alarm detection period: number of months to test for signal detection",
-                     "Alarm detection period: number of weeks to test for signal detection"),
+                     "Signal detection period: number of months to test for signal detection",
+                     "Signal detection period: number of weeks to test for signal detection"),
       min = 1,
       max = ifelse(input$unit == "Month", 12, 53),
       value = ifelse(input$unit == "Month", 3, 13)
@@ -289,8 +289,8 @@ shinyServer(function(input, output, session) {
       session,
       inputId = "testingperiod",
       label = ifelse(input$unit == "Month",
-                     "Alarm detection period: number of months to test for signal detection",
-                     "Alarm detection period: number of weeks to test for signal detection"),
+                     "Signal detection period: number of months to test for signal detection",
+                     "Signal detection period: number of weeks to test for signal detection"),
       min = 1,
       max = ifelse(input$unit == "Month", 12, 53),
       value = ifelse(input$unit == "Month", 3, 13)
@@ -337,8 +337,8 @@ shinyServer(function(input, output, session) {
       session,
       inputId = "testingperiod",
       label = ifelse(input$unit == "Month",
-                     "Alarm detection period: number of months to test for signal detection",
-                     "Alarm detection period: number of weeks to test for signal detection"),
+                     "Signal detection period: number of months to test for signal detection",
+                     "Signal detection period: number of weeks to test for signal detection"),
       min = 1,
       max = ifelse(input$unit == "Month", 12, 53),
       value = ifelse(input$unit == "Month", 3, 13)
@@ -379,8 +379,8 @@ shinyServer(function(input, output, session) {
       session,
       inputId = "testingperiod",
       label = ifelse(input$unit == "Month",
-                     "Alarm detection period: number of months to test for signal detection",
-                     "Alarm detection period: number of weeks to test for signal detection"),
+                     "Signal detection period: number of months to test for signal detection",
+                     "Signal detection period: number of weeks to test for signal detection"),
       min = 1,
       max = ifelse(input$unit == "Month", 12, 53),
       value = ifelse(input$unit == "Month", 3, 13)
@@ -490,7 +490,7 @@ shinyServer(function(input, output, session) {
                                  Place = input$country,
                                  Observed = as.character(dataset.algo@observed[l]),
                                  Threshold.ALGO = as.character(round(dataset.algo@upperbound[l],0)),
-                                 ALGO = ifelse(dataset.algo@alarm[l],"Alarm","no"),
+                                 ALGO = ifelse(dataset.algo@alarm[l],"Signal","no"),
                                  CasesByCountry = Time$CasesByCountry[l]
                       )
       )
@@ -498,11 +498,11 @@ shinyServer(function(input, output, session) {
 
     Result <- Result[-1, ]
     row.names(Result) <- NULL
-    names(Result) <- c(paste("Time (agg. by ", tolower(input$unit), ")", sep = ""),
+    names(Result) <- c(paste("Time ( by ", tolower(input$unit), ")", sep = ""),
                        "Place",
                        "Reported cases",
                        "Threshold value",
-                       "Alarm",
+                       "Signal",
                        "Countries (cases)")
     Result
 
@@ -523,7 +523,7 @@ shinyServer(function(input, output, session) {
   output$testingPeriod <- renderText({
     if(input$unit != "" & !is.na(input$daterange[1]) & !is.na(input$daterange[2]) ){
       studyPeriod <- studyPeriod(input)
-      paste(" --> Selected alarm detection period from
+      paste(" --> Selected signal detection period from
               <font style=\"color:#E95420;\"> ",
             studyPeriod$Time[nrow(studyPeriod)-input$testingperiod+1] ,
             "</font> to <font style=\"color:#E95420;\">",
@@ -594,7 +594,7 @@ shinyServer(function(input, output, session) {
     if(input$do == FALSE) return()
     isolate({
       Result <- makeTable()
-      Result$Alarm <- ifelse(Result$Alarm == "Alarm" , "<span style=\"color:#DD4814\">Alarm</span>" , "no")
+      Result$Signal <- ifelse(Result$Signal == "Signal" , "<span style=\"color:#DD4814\">Signal</span>" , "no")
       if(input$country != "EU-EEA - complete series"){ Result <- Result[, !(names(Result) %in% "Countries (cases)")] }
       Result
     })
@@ -631,7 +631,7 @@ shinyServer(function(input, output, session) {
       Algo <- dplyr::bind_cols(
         epoch = dataset.algo@epoch,
         threshold = dataset.algo@upperbound,
-        alarm = dataset.algo@alarm
+        signal = dataset.algo@signal
       )
       Result <- dplyr::left_join(Result, Algo, by = "epoch")
       Result <- dplyr::select(Result, -epoch)
