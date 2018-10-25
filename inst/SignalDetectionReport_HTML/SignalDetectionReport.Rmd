@@ -163,7 +163,7 @@ if(input$country == "EU-EEA - complete series") {
          x = "Reporting country", y = "Number of cases") +
     theme(title = element_text(size = 14), 
           axis.text = element_text(size = 12),
-          axis.text.x = element_text(size = 12, angle = 90),
+          axis.text.x = element_text(size = 12),
           axis.title = element_text(size = 14, face = "bold"), 
           plot.title = element_text(color = "grey", hjust = 0, vjust = 0),
           panel.grid.major = element_blank(), 
