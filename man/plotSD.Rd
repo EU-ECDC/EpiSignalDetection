@@ -7,16 +7,17 @@
 plotSD(x, input, subRegionName, x.sts, x.algo)
 }
 \arguments{
-\item{x}{data.frame (default EpiSignalDetection::SignalData)}
+\item{x}{dataframe (default \code{\link{SignalData}})}
 
-\item{input}{list of parameters from the Signal Detection Application
-(i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))}
+\item{input}{list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
 
-\item{subRegionName}{region name label to use in the plot, if different than input$RegionName (optional)}
+(i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})}
 
-\item{x.sts}{sts object (optional)}
+\item{subRegionName}{character string, region label to use in the plot, if different than \code{input$RegionName} (optional)}
 
-\item{x.algo}{algo object (optional)}
+\item{x.sts}{sts object (optional), see \code{\link{stsSD}})}
+
+\item{x.algo}{algo object (optional), see \code{\link{algoSD}})}
 }
 \value{
 plot
@@ -42,5 +43,5 @@ plotSD(input = input)
 
 }
 \seealso{
-\code{\link{SignalData}}
+\code{\link{SignalData}} \code{\link{runEpiSDApp}}
 }

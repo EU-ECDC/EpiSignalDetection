@@ -7,13 +7,14 @@
 filterAtlasExport(x, input, stratified)
 }
 \arguments{
-\item{x}{dataframe, clean Atlas export}
+\item{x}{dataframe, clean Atlas export (see \code{\link{cleanAtlasExport}})}
 
-\item{input}{list of parameters from the Signal Detection Application
-(i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))}
+\item{input}{list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+
+(i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})}
 
 \item{stratified}{a logical value indicating whether the report
-should be stratified by "Population" variable or not (default FALSE)}
+should be stratified by \code{Population} variable or not (default \code{FALSE})}
 }
 \value{
 dataframe filtered on the selected parameters (input list)
@@ -40,4 +41,7 @@ dataset <- EpiSignalDetection::SignalData
 #-- Filtering on declared input parameters
 dataset <- filterAtlasExport(dataset, input, stratified = FALSE)
 
+}
+\seealso{
+\code{\link{cleanAtlasExport}} \code{\link{aggAtlasExport}}
 }

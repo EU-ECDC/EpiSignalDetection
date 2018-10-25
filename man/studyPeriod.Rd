@@ -7,17 +7,19 @@
 studyPeriod(input)
 }
 \arguments{
-\item{input}{list of parameters from the Signal Detection Application
-(i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))}
+\item{input}{list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+
+(i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})}
 }
 \value{
 Dataframe including the complete time series with no gaps:
-\item{StudyPeriod}{approximated daily date e.g. 2010-01-01}
-\item{Time}{exact date in the format according to the time unit parameter e.g. 2010-01}
+\item{StudyPeriod}{approximated daily date e.g. \code{2010-01-01}}
+\item{Time}{exact date in the format according to the time unit parameter e.g. \code{2010-01}}
 }
 \description{
-Compute a dataframe including two types of dates corresponding to the study period defined in the list of parameters 'input'
-(StudyPeriod=approximated daily date; Time=exact date in the format according to the time unit parameter)
+Compute a dataframe including two types of dates corresponding
+to the study period defined in the list of parameters \code{input} \cr
+(i.e. \code{StudyPeriod} = approximated daily date; \code{Time} = exact date in the format according to the time unit parameter)
 }
 \examples{
 #-- Setting the parameters to run the report for

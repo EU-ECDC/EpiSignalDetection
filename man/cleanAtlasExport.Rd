@@ -7,26 +7,32 @@
 cleanAtlasExport(x)
 }
 \arguments{
-\item{x}{dataframe, usually the ouput of the import function 'importAtlasExport(x)'}
+\item{x}{dataframe, usually the ouput of the import function \code{importAtlasExport(x)}}
 }
 \value{
 dataframe
 }
 \description{
-Clean the Atlas data export dataframe before signal detection analysis
-(see ?importAtlasExport() and online ECDC Atlas: http://atlas.ecdc.europa.eu/public/index.aspx) \cr
-dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') ) \cr
+Clean the Atlas data export dataframe before signal detection analysis \cr
+(see \code{\link{importAtlasExport}} and online ECDC Atlas:
+\href{http://atlas.ecdc.europa.eu/public/index.aspx}{http://atlas.ecdc.europa.eu/public/index.aspx}) \cr
 }
 \details{
 The function will: \cr
-- Filter only on case based indicators i.e. 'Reported Cases" \cr
-- Create four additional time variables to ease the analysis: \cr
-TimeUnit ('Year', 'Month', 'Week'), \cr
-TimeYear (xxxx), \cr
-TimeMonth (xx) \cr
-TimeWeek(xx) \cr
-- Keep only variables of interest i.e. "HealthTopic", "Population", "Time", "RegionName", "NumValue" \cr
+\itemize{
+   \item Filter only on case based indicators i.e. 'Reported Cases"
+   \item Create four additional time variables to ease the analysis: \cr
+   TimeUnit ('Year', 'Month', 'Week'), \cr
+   TimeYear (xxxx), \cr
+   TimeMonth (xx) \cr
+   TimeWeek(xx)
+   \item Keep only variables of interest i.e. "HealthTopic", "Population", "Time", "RegionName", "NumValue"
+}
+}
+\examples{
+# dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') )
+
 }
 \seealso{
-\code{\link{importAtlasExport}}
+\code{\link{importAtlasExport}} \code{\link{filterAtlasExport}}
 }

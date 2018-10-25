@@ -1,16 +1,28 @@
-#' Import ECDC Atlas export csv file
+#' Import ECDC Atlas export file (csv)
 #'
-#' Import ECDC Atlas csv file that you can export
-#' from the online ECDC Atlas: http://atlas.ecdc.europa.eu/public/index.aspx
-#' e.g. ECDC_surveillance_data_Anthrax.csv \cr
-#' dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+#' Import ECDC Atlas csv export file \cr
+#' (exported from the online ECDC Atlas:
+#' \href{http://atlas.ecdc.europa.eu/public/index.aspx}{http://atlas.ecdc.europa.eu/public/index.aspx}) \cr
+#' e.g. "ECDC_surveillance_data_Anthrax.csv" \cr
+#'
 #'
 #' The function will interpret missing reports '-' as NA values
 #'
+#'
 #' @param x file name of a csv file, export from the ECDC Atlas
-#' (e.g. x = 'ECDC_surveillance_data_Anthrax.csv')
+#'
+#' (e.g. \code{x = 'ECDC_surveillance_data_Anthrax.csv'})
+#'
+#'
 #' @return dataframe
+#'
 #' @usage importAtlasExport(x)
+#'
+#' @examples
+#' # dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+#'
+#' @seealso \code{\link{cleanAtlasExport}}
+#'
 #' @export
 
 importAtlasExport <- function(x) {
@@ -28,23 +40,35 @@ importAtlasExport <- function(x) {
 
 #' Clean the Atlas export dataframe
 #'
-#' Clean the Atlas data export dataframe before signal detection analysis
-#' (see ?importAtlasExport() and online ECDC Atlas: http://atlas.ecdc.europa.eu/public/index.aspx) \cr
-#' dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') ) \cr
+#' Clean the Atlas data export dataframe before signal detection analysis \cr
+#' (see \code{\link{importAtlasExport}} and online ECDC Atlas:
+#' \href{http://atlas.ecdc.europa.eu/public/index.aspx}{http://atlas.ecdc.europa.eu/public/index.aspx}) \cr
+#'
 #'
 #' The function will: \cr
-#' - Filter only on case based indicators i.e. 'Reported Cases" \cr
-#' - Create four additional time variables to ease the analysis: \cr
-#' TimeUnit ('Year', 'Month', 'Week'), \cr
-#' TimeYear (xxxx), \cr
-#' TimeMonth (xx) \cr
-#' TimeWeek(xx) \cr
-#' - Keep only variables of interest i.e. "HealthTopic", "Population", "Time", "RegionName", "NumValue" \cr
+#' \itemize{
+#'    \item Filter only on case based indicators i.e. 'Reported Cases"
+#'    \item Create four additional time variables to ease the analysis: \cr
+#'    TimeUnit ('Year', 'Month', 'Week'), \cr
+#'    TimeYear (xxxx), \cr
+#'    TimeMonth (xx) \cr
+#'    TimeWeek(xx)
+#'    \item Keep only variables of interest i.e. "HealthTopic", "Population", "Time", "RegionName", "NumValue"
+#' }
 #'
-#' @param x dataframe, usually the ouput of the import function 'importAtlasExport(x)'
+#'
+#'
+#' @param x dataframe, usually the ouput of the import function \code{importAtlasExport(x)}
+#'
 #' @return dataframe
+#'
 #' @usage cleanAtlasExport(x)
-#' @seealso \code{\link{importAtlasExport}}
+#'
+#' @seealso \code{\link{importAtlasExport}} \code{\link{filterAtlasExport}}
+#'
+#' @examples
+#' # dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') )
+#'
 #' @export
 
 cleanAtlasExport <- function(x) {
@@ -112,17 +136,20 @@ cleanAtlasExport <- function(x) {
 
 #' Compute the study period
 #'
-#' Compute a dataframe including two types of dates corresponding to the study period defined in the list of parameters 'input'
-#' (StudyPeriod=approximated daily date; Time=exact date in the format according to the time unit parameter)
+#' Compute a dataframe including two types of dates corresponding
+#' to the study period defined in the list of parameters \code{input} \cr
+#' (i.e. \code{StudyPeriod} = approximated daily date; \code{Time} = exact date in the format according to the time unit parameter)
 #'
-#' @param input list of parameters from the Signal Detection Application
-#' (i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))
+#' @param input list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+#'
+#' (i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})
 #'
 #' @return Dataframe including the complete time series with no gaps:
-#' \item{StudyPeriod}{approximated daily date e.g. 2010-01-01}
-#' \item{Time}{exact date in the format according to the time unit parameter e.g. 2010-01}
+#' \item{StudyPeriod}{approximated daily date e.g. \code{2010-01-01}}
+#' \item{Time}{exact date in the format according to the time unit parameter e.g. \code{2010-01}}
 #'
 #' @usage studyPeriod(input)
+#'
 #' @examples
 #' #-- Setting the parameters to run the report for
 #' input <- list(
@@ -179,13 +206,19 @@ studyPeriod <- function(input){
 #'
 #' Filter clean Atlas export according to input parameters
 #'
-#' @param x dataframe, clean Atlas export
-#' @param input list of parameters from the Signal Detection Application
-#' (i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))
+#' @param x dataframe, clean Atlas export (see \code{\link{cleanAtlasExport}})
+#'
+#' @param input list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+#'
+#' (i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})
+#'
 #' @param stratified a logical value indicating whether the report
-#' should be stratified by "Population" variable or not (default FALSE)
+#' should be stratified by \code{Population} variable or not (default \code{FALSE})
+#'
 #' @usage filterAtlasExport(x, input, stratified)
+#'
 #' @return dataframe filtered on the selected parameters (input list)
+#'
 #' @examples
 #' #-- Setting the parameters to run the report for
 #' input <- list(
@@ -204,6 +237,8 @@ studyPeriod <- function(input){
 #'
 #' #-- Filtering on declared input parameters
 #' dataset <- filterAtlasExport(dataset, input, stratified = FALSE)
+#'
+#' @seealso \code{\link{cleanAtlasExport}} \code{\link{aggAtlasExport}}
 #'
 #' @export
 
@@ -259,11 +294,16 @@ filterAtlasExport <- function(x, input, stratified){
 #' Aggregate filtered final Atlas export
 #'
 #' Aggregate filtered final Atlas export
+#'
 #' @param x dataframe
-#' @param input list of parameters from the Signal Detection Application
-#' (i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))
+#' @param input list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+#'
+#' (i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})
+#'
 #' @return dataframe aggregated by geographical level and time unit
+#'
 #' @usage aggAtlasExport(x, input)
+#'
 #' @examples
 #' #-- Setting the parameters to run the report for
 #' input <- list(
@@ -286,7 +326,8 @@ filterAtlasExport <- function(x, input, stratified){
 #' #-- Aggregating the data by geographical level and time point
 #' dataset <- aggAtlasExport(dataset, input)
 #'
-#' @seealso \code{\link{filterAtlasExport}} \code{\link{SignalData}}
+#' @seealso \code{\link{filterAtlasExport}} \code{\link{SignalData}} \code{\link{stsSD}}
+#'
 #' @export
 
 aggAtlasExport <- function(x, input){
@@ -310,7 +351,7 @@ aggAtlasExport <- function(x, input){
   x <-  dplyr::group_by_(x, c("StudyPeriod") )
   x <-  dplyr::summarise(x,
                          "CasesByCountry" = paste(RegionName, " (", NumValue, ")", sep = "", collapse = ", "),
-                         "NumValue" = sum(NumValue)  )
+                         "NumValue" = sum(NumValue, na.rm = TRUE)  )
   x <-  dplyr::ungroup(x)
 
   x <- dplyr::arrange(x, x$StudyPeriod)
@@ -358,6 +399,9 @@ aggAtlasExport <- function(x, input){
 #'                      timeUnit = input$unit,
 #'                      startYM = c(as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%Y")),
 #'                                  as.numeric(format(as.Date(input$daterange[1], "%Y-%m-%d"), "%m"))))
+#'
+#' @seealso \code{\link{aggAtlasExport}} \code{\link{algoSD}}
+#'
 #' @export
 
 stsSD <- function(observedCases, studyPeriod, timeUnit = "Month", startYM = c(2000, 1) ){
@@ -386,7 +430,7 @@ stsSD <- function(observedCases, studyPeriod, timeUnit = "Month", startYM = c(20
 #' Build algo object from an sts object class
 #' using either FarringtonFlexible or GLRNB surveillance algorithm
 #'
-#' @param x.sts sts class object (see \link{stsSD} output)
+#' @param x.sts sts class object (see \code{\link{stsSD}} output)
 #' @param algo character string containing the name of the algorithm to use.
 #' Options are "FarringtonFlexible" (default) or "GLRNB".
 #' @param timeUnit character string for the time unit of the time series. Options are "Week" or "Month".
@@ -430,7 +474,7 @@ stsSD <- function(observedCases, studyPeriod, timeUnit = "Month", startYM = c(20
 #'                        testingPeriod =
 #'                        input$testingperiod)
 #'
-#' @seealso \code{\link{stsSD}}
+#' @seealso \code{\link{stsSD}} \code{\link{plotSD}}
 #' @export
 
 algoSD <- function(x.sts, algo = "FarringtonFlexible",
@@ -519,14 +563,19 @@ algoSD <- function(x.sts, algo = "FarringtonFlexible",
 #'
 #' Plot the Signal Detection time series including historical data, alarm detection period and alarms
 #'
-#' @param x data.frame (default EpiSignalDetection::SignalData)
-#' @param input list of parameters from the Signal Detection Application
-#' (i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))
-#' @param subRegionName region name label to use in the plot, if different than input$RegionName (optional)
-#' @param x.sts sts object (optional)
-#' @param x.algo algo object (optional)
+#' @param x dataframe (default \code{\link{SignalData}})
+#' @param input list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+#'
+#' (i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})
+#'
+#' @param subRegionName character string, region label to use in the plot, if different than \code{input$RegionName} (optional)
+#' @param x.sts sts object (optional), see \code{\link{stsSD}})
+#' @param x.algo algo object (optional), see \code{\link{algoSD}})
+#'
 #' @return plot
+#'
 #' @usage plotSD(x, input, subRegionName, x.sts, x.algo)
+#'
 #' @examples
 #' #-- Setting the parameters to run the report for
 #' input <- list(
@@ -543,7 +592,7 @@ algoSD <- function(x.sts, algo = "FarringtonFlexible",
 #' #-- Plotting the signal detection output
 #' plotSD(input = input)
 #'
-#' @seealso \code{\link{SignalData}}
+#' @seealso \code{\link{SignalData}} \code{\link{runEpiSDApp}}
 #' @export
 
 plotSD <- function(x, input, subRegionName, x.sts, x.algo){

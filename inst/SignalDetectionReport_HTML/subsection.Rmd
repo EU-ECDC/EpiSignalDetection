@@ -22,7 +22,7 @@ if(nrow(Result_c) != 0) {
                     dom = 't',
                     columnDefs = list(list(className = 'dt-left', orderable=FALSE, targets="_all")))
             )
-}else {pander::pandoc.p("No alarms")}
+}else {pander::pandoc.p("No signals")}
 
 ```
 

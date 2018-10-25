@@ -127,7 +127,7 @@ shinyUI(
                                         separator = " - "),
 
                          sliderInput(inputId ="testingperiod",
-                                     label= "Alarm detection period: number of months/weeks to test for signal detection",
+                                     label= "Signal detection period: number of months/weeks to test for signal detection",
                                      min = 1,
                                      max = 12,
                                      value = 3),
@@ -197,7 +197,7 @@ shinyUI(
               column( width = 2, offset = 0, style='padding-left:39px;',
                       conditionalPanel("input.do",
                                        downloadButton("signalDetectionReport",
-                                                      "Generate and download the report of alarms at country level (HTML format)",
+                                                      "Generate and download the report of signals at country level (HTML format)",
                                                       class = "butt1"),
                                        tags$head(tags$style(".butt1{background-color:#ED764C;}
                                                     .butt1{color: black;}

@@ -9,8 +9,9 @@ aggAtlasExport(x, input)
 \arguments{
 \item{x}{dataframe}
 
-\item{input}{list of parameters from the Signal Detection Application
-(i.e. list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod))}
+\item{input}{list of parameters as defined in the Signal Detection Application (see \code{\link{runEpiSDApp}})
+
+(i.e.  \code{list(disease, country, indicator, stratification, unit, daterange, algo, testingperiod)})}
 }
 \value{
 dataframe aggregated by geographical level and time unit
@@ -42,5 +43,5 @@ dataset <- aggAtlasExport(dataset, input)
 
 }
 \seealso{
-\code{\link{filterAtlasExport}} \code{\link{SignalData}}
+\code{\link{filterAtlasExport}} \code{\link{SignalData}} \code{\link{stsSD}}
 }

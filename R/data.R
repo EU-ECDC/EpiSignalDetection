@@ -23,7 +23,7 @@
 #' @docType data
 #' @keywords datasets
 #' @name SignalData
-#' @usage data(SignalData)
+#' @usage SignalData
 #' @source \url{http://atlas.ecdc.europa.eu/public/index.aspx}
 "SignalData"
 
@@ -86,7 +86,7 @@
 #' @docType data
 #' @keywords datasets
 #' @name AlgoParam
-#' @usage data(AlgoParam)
+#' @usage AlgoParam
 "AlgoParam"
 
 

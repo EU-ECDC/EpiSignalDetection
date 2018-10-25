@@ -1,7 +1,7 @@
 ---
-title: "Stratified report of alarms "
-subtitle: "`r params$disease` cases in `r params$country` (`r params$indicator`) "
-date: "`r format(Sys.time(), '%Y-%m-%d')`"
+title: "`r params$disease`: Stratified report of signals "
+subtitle: "This report uses `r params$disease` cases reported in `r params$country` (`r params$indicator`) "
+date: "Generated on:  `r format(Sys.time(), '%Y-%m-%d')`"
 output:
   html_document:
     css: "style.css"
@@ -13,12 +13,12 @@ output:
 params:
   file : NULL
   disease: "Salmonellosis"
-  country: "Greece"
+  country: "EU-EEA - complete series"
   indicator: "Reported cases"
   stratification: "Confirmed cases"
   unit: "Month"
   daterange: !r c("2010-01-01", "2016-12-31")
-  algo: "GLRNB"
+  algo: "FarringtonFlexible"
   testingperiod: !r 6
   tempPath: !r tempdir()
 ---
@@ -122,10 +122,10 @@ if (input$country == "EU-EEA - complete series") {
   if (length(included) != 0) {
     dataset <- dplyr::filter(dataset, dataset$RegionName %in% included )
   } else {
-    warning("All countries present with at least one gap in the time series")
+    warning("All countries present with at least one gmissing value in the time series")
   }
 } else if (length(excluded) !=0) {
-  warning("The selected country presents with at least one gap in the time series")
+  warning("The selected country presents with at least one missing value in the time series")
 }
 
 
@@ -141,24 +141,25 @@ datasetTP <- dplyr::filter(dataset, Time %in% TestingPeriod)
 # Study period: `r StudyPeriod$Time[1]` to `r StudyPeriod$Time[length(StudyPeriod$Time)]`
 * __Historical data__: From `r StudyPeriod$Time[1]` 
 to `r StudyPeriod$Time[length(StudyPeriod$Time) - input$testingperiod]`.
-* __Alarm detection period__: 
+* __signal detection period__: 
 The last `r input$testingperiod` `r tolower(input$unit)`(s) 
 of the study period: from `r TestingPeriod[input$testingperiod]` 
 to  `r TestingPeriod[1]`.
 * __Time unit__: `r input$unit`(s). 
 * __Signal detection algorithm__: `r input$algo`.
-* __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one gap:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one gap", "None" )))`.
+* __Gaps in the time series__: `r ifelse(input$country == "EU-EEA - complete series", (ifelse(length(excluded) !=0, paste("The following country(ies) presented with at least one missing value in the time series:", paste(excluded, collapse = ", ")), "None" )), (ifelse(length(excluded) !=0, "The selected country presented with at least one missing value in the time series", "None" )))`.
 
 
 
 
 
-# Alarm detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+# Overview cases reported in the signal detection period: `r TestingPeriod[input$testingperiod]` to `r TestingPeriod[1]`
+
 
 * There is(are) `r length(unique(datasetTP$RegionName[datasetTP$NumValue>0]))` 
-country(ies) reporting at least 1 case in the alarm detection period.
+country(ies) reporting at least 1 case in the signal detection period.
 * There are `r sum(datasetTP$NumValue, na.rm=TRUE)` cases reported 
-in the alarm detection period, all strata added up.
+in the signal detection period, all strata added up.
 
 
 ```{r GraphByReportingCountries}
@@ -170,10 +171,18 @@ if(input$country == "EU-EEA - complete series") {
     dplyr::summarise( NumValue = sum(NumValue)  ) %>%
     dplyr::ungroup()
   
+  
+  #--- Sort by number cases by countries 
+  datasetByCountry <- datasetByCountry %>%
+    dplyr::arrange(NumValue) %>%
+    dplyr::mutate(RegionName = factor(datasetByCountry$RegionName, levels = datasetByCountry$RegionName))
+
+  
   p <- ggplot(datasetByCountry, aes(x = RegionName, y = NumValue)) +
     geom_bar(stat = "identity", fill = maincolor) +
     scale_y_continuous(expand = c(0,0)) +
-    labs(title = "Graph: Number of cases observed by country in the alarm detection period", 
+    coord_flip() +
+    labs(title = "Graph: Number of cases observed by country in the signal detection period", 
          x = "Reporting country", y = "Number of cases") +
     theme(title = element_text(size = 14), 
           axis.text = element_text(size = 12),
@@ -193,7 +202,8 @@ if(input$country == "EU-EEA - complete series") {
 
 # Stratification variable
 
-This report is stratified according to the stratification variable 'Population'.
+This report is stratified according to the data entered in the variable 'Population'.
+
 
 
 ```{r}
@@ -203,12 +213,12 @@ strata <- na.omit(unique(datasetTP$Population[datasetTP$NumValue>0]))
 
 
 * The selected strata are those with at least one reported case during 
-the alarm detection period.
+the signal detection period.
 * There are `r length(strata)` strata with at least one case 
-in the alarm detection period: `r paste(strata, collapse = ", ")`.
+in the signal detection period: `r paste(strata, collapse = ", ")`.
 
 In decreasing order of number of cases, the most frequent serotypes on 
-the alarm detecion period are:
+the signal detecion period are:
 
 
 ```{r TableByStratum}
@@ -315,7 +325,7 @@ for(i in 1:length(countries)){
                                      Observed = as.character(dataset.algo@observed[l]),
                                      Threshold.ALGO = as.character(round(dataset.algo@upperbound[l],0)),
                                      ALGO = ifelse(dataset.algo@alarm[l],
-                                                   "<span style=\"color:#DD4814\">Alarm</span>",
+                                                   "<span style=\"color:#DD4814\">Signal</span>",
                                                    "no"),
                                      Ranking = round(dataset.algo@control$score[l], 2 ),
                                      p.value = ifelse(dataset.algo@control$pvalue[l] < 0.00001,
@@ -336,7 +346,7 @@ for(i in 1:length(countries)){
         expected <- dataset.algo@control$mu0
         threshold <- dataset.algo@upperbound
         ranking <- ((observed - expected) / (threshold - expected))
-        pvalue <- "Not avalaible in the current version"
+        pvalue <- "Not applicable"
         # ---
         
         for(l in 1:(input$testingperiod)){
@@ -347,7 +357,7 @@ for(i in 1:length(countries)){
                                      Observed = as.character(observed[l]),
                                      Threshold.ALGO = as.character(round(threshold[l],0)),
                                      ALGO = ifelse(dataset.algo@alarm[l],
-                                                   "<span style=\"color:#DD4814\">Alarm</span>",
+                                                   "<span style=\"color:#DD4814\">Signal</span>",
                                                    "no"),
                                      Ranking = round(ranking[l], 2 ),
                                      p.value = pvalue
@@ -384,14 +394,14 @@ Result <- Result[-1,]
 out=NULL
 
 for(i in countries){  
-  Result_c <- dplyr::filter(Result, Place == i & grepl("Alarm", ALGO))
+  Result_c <- dplyr::filter(Result, Place == i & grepl("Signal", ALGO))
   row.names(Result_c) <- NULL
-  names(Result_c) <- c(paste("Time (agg. by ", tolower(input$unit), ")", sep = ""),
+  names(Result_c) <- c(paste("Time ( by ", tolower(input$unit), ")", sep = ""),
                        "Place",
                        "Stratum",
                        "Reported cases",
                        "Threshold value",
-                       "Alarm",
+                       "Signal",
                        "Exceedance score",
                        "P.value")
   
@@ -418,14 +428,14 @@ for(i in countries){
 out=NULL
 
 for(i in strata){  
-  Result_c <- dplyr::filter(Result, Stratum == i & grepl("Alarm", ALGO))
+  Result_c <- dplyr::filter(Result, Stratum == i & grepl("Signal", ALGO))
   row.names(Result_c) <- NULL
-  names(Result_c) <- c(paste("Time (agg. by ", tolower(input$unit), ")", sep = ""),
+  names(Result_c) <- c(paste("Time ( by ", tolower(input$unit), ")", sep = ""),
                        "Place",
                        "Stratum",
                        "Reported cases",
                        "Threshold value",
-                       "Alarm",
+                       "Signal",
                        "Exceedance score",
                        "P.value")
   
