@@ -1,5 +1,5 @@
 # '_EpiSignalDetection_' package
-EpiConcept / European Centre for Disease Prevention and Control (ECDC)
+European Centre for Disease Prevention and Control (ECDC)
 
 
 # Description

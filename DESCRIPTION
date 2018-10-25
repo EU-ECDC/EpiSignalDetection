@@ -1,7 +1,7 @@
 Package: EpiSignalDetection
 Type: Package
 Title: Signal Detection Analysis
-Version: 1.0
+Version: 0.1.0
 Date: 2018-10-26
 Authors@R: c( 
   person( given = "Lore", family = "Merdrignac", 
@@ -9,9 +9,9 @@ Authors@R: c(
   person( given = "Joana", family = "Gomes Dias", 
           role = c("aut", "fnd", "cre"), email = "joana.gomes.dias@ecdc.europa.eu", comment = "Project manager and package maintainer"),
   person( given = "Esther", family = "Kissling", 
-          role = c("aut", "ctr"), email = "e.kissling@epiconcept.fr", comment = "Project manager"),
+          role = c("aut", "ctr"), email = "e.kissling@epiconcept.fr"),
   person( given = "Tommi", family = "Karki", 
-          role = c("aut", "fnd"), email = "tommi.karki@ecdc.europa.eu", comment = "Project manager"),
+          role = c("aut", "fnd"), email = "tommi.karki@ecdc.europa.eu"),
   person( given = "Margot", family = "Einoder-Moreno", 
           role = c("ctb", "fnd"), email = "margot.einoder-moreno@ecdc.europa.eu")) 
 Description: The EpiSignalDetection package allows the user to explore time series for signal detection. 
