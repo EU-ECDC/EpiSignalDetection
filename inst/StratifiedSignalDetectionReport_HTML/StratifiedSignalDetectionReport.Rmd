@@ -361,9 +361,6 @@ for(i in 1:length(countries)){
                                                    "no"),
                                      Ranking = round(ranking[l], 2 ),
                                      p.value = pvalue
-                                     # p.value = ifelse(dataset.algo@control$pvalue[l] < 0.00001,
-                                     #                  "<0.00001", 
-                                     #                  as.character( round(dataset.algo@control$pvalue[l],5)))
                           )
           )
         }
