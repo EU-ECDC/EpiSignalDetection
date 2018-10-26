@@ -1,6 +1,6 @@
 ---
-title: "`r params$disease`: Stratified report of signals "
-subtitle: "This report uses `r params$disease` cases reported in `r params$country` (`r params$indicator`) "
+title: "`r params$disease`: Stratified report of signals"
+subtitle: "This report uses `r params$disease` cases reported in `r params$country` (`r params$indicator`)"
 date: "Generated on:  `r format(Sys.time(), '%Y-%m-%d')`"
 output:
   html_document:
