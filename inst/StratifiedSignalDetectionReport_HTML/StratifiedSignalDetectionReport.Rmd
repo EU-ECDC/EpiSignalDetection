@@ -17,9 +17,9 @@ params:
   indicator: "Reported cases"
   stratification: "Confirmed cases"
   unit: "Month"
-  daterange: !r c("2010-01-01", "2016-12-31")
+  daterange: !r c("2011-01-01", "2016-12-31")
   algo: "FarringtonFlexible"
-  testingperiod: !r 6
+  testingperiod: !r 3
   tempPath: !r tempdir()
 ---
 

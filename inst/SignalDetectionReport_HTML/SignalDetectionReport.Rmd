@@ -19,7 +19,7 @@ params:
   unit: "Month"
   daterange: !r c("2011-01-01", "2016-12-31")
   algo: "FarringtonFlexible"
-  testingperiod: !r 6
+  testingperiod: !r 3
   tempPath: !r tempdir()
 ---
 

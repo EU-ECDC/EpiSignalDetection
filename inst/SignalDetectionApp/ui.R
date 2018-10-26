@@ -14,7 +14,6 @@ shinyUI(
     #-------------------------------------------------------
     #---- Theme of the application and CSS style
     #-------------------------------------------------------
-    theme <- shinythemes::shinytheme("united"),
     includeCSS("style.css"),
 
 
