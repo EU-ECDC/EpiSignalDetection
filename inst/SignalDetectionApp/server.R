@@ -631,7 +631,7 @@ shinyServer(function(input, output, session) {
       Algo <- dplyr::bind_cols(
         epoch = dataset.algo@epoch,
         threshold = dataset.algo@upperbound,
-        signal = dataset.algo@signal
+        signal = dataset.algo@alarm
       )
       Result <- dplyr::left_join(Result, Algo, by = "epoch")
       Result <- dplyr::select(Result, -epoch)
