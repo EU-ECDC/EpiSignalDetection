@@ -236,7 +236,7 @@ for(i in 1:length(countries)){
   if (!file.exists(paste(tempPath, "\\plots", sep = ""))){
     dir.create(file.path(tempPath, "plots"))
   }
-  dev.new()
+
   png(file = paste(tempPath, "/plots/", sub("/", "-", country), "_TimeSeries.png", sep = ""), 
       width = 1450, height = 500, res=90)
   EpiSignalDetection::plotSD(dataset_1, input, subRegionName = country, 
