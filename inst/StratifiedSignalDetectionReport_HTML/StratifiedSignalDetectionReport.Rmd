@@ -389,7 +389,7 @@ Result <- Result[-1,]
 ## By geographical level
 
 
-```{r AlarmTableByGeo, results = 'hide'}
+```{r AlarmTableByGeo, results = 'hide', fig.show = 'hide'}
 
 out=NULL
 
@@ -423,7 +423,7 @@ for(i in countries){
 ## By stratification level
 
 
-```{r AlarmTableByPop, results = 'hide'}
+```{r AlarmTableByPop, results = 'hide', fig.show = 'hide'}
 
 out=NULL
 
