@@ -25,7 +25,7 @@ __Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__
 <br>
 
 __Fig.2 Report of alarms__
-![](vignettes/img/report_screenshot_20181022.PNG "Fig.2 Report of alarms")
+![](vignettes/img/report_screenshot_20181026.PNG "Fig.2 Report of alarms")
 
 ...
 
