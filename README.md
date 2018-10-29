@@ -3,8 +3,9 @@ European Centre for Disease Prevention and Control (ECDC)
 
 
 # Description
-The EpiSignalDetection package allows the user to explore time series for signal detection. 
-It is specifically designed to detect possible outbreaks using infectious disease surveillance data at EU/EEA or country level.
+The 'EpiSignalDetection' package allows the user to explore time series for signal detection. 
+It is specifically designed to detect possible outbreaks using infectious disease surveillance data 
+at the European Union / European Economic Area or country level.
 
 The package includes:
 
