@@ -2,7 +2,7 @@ Package: EpiSignalDetection
 Type: Package
 Title: Signal Detection Analysis
 Version: 0.1.0
-Date: 2018-10-26
+Date: 2018-10-29
 Authors@R: c( 
   person( given = "Lore", family = "Merdrignac", 
           role = c("aut", "ctr"), email = "l.merdrignac@epiconcept.fr", comment = "Author of the package and original code"),
@@ -22,8 +22,7 @@ Description: The 'EpiSignalDetection' package allows the user to explore time se
       in which the user can import external data and perform basic signal detection analyses; 
     - An automated report in HTML format, presenting the results of the time series analysis in tables and graphs. 
       This report can also be stratified by population characteristics (see 'Population' variable).
-    This project was funded by the European Centre for Disease Prevention and Control 
-    within the Framework Contract "ECDC/2014/041".
+    This project was funded by the European Centre for Disease Prevention and Control.
 Depends: R (>= 3.4.0)
 License: EUPL
 Encoding: UTF-8
