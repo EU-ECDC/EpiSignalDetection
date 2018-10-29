@@ -288,12 +288,12 @@ Each parameter has a default value.
 However, values available in the dropdown menus are hierarchically updated 
 according to the previous parameter selection (see workflow described in Fig.2 below). 
 
-![__Fig.2 Workflow of panel update__](img/workflow.PNG?raw=true "Fig.2 Workflow of panel update")
+![__Fig.2 Workflow of panel update__](img/workflow.png?raw=true "Fig.2 Workflow of panel update")
 
 In all dropdown boxes, the user can also choose to type in the values themselves - 
 or start typing and select from options, rather than select from the dropdown menu (see Fig.3).
 
-![__Fig.3 Dropdown boxes__](img/dropdown-menu.PNG?raw=true "Fig.3 Dropdown boxes")
+![__Fig.3 Dropdown boxes__](img/dropdown-menu.png?raw=true "Fig.3 Dropdown boxes")
 
 In the first panel _Dataset selection_, user need to specify on which dataset to work on. 
 The dropdown menus will display all values available in the given dataset:
@@ -316,14 +316,14 @@ The minimum and the maximum are set to the full range of the time variable avail
 The user can either type each date or use the calendar to define the start 
 and the end of the study period (see Fig.4).
 
-![__Fig.4 Calendar parameter__](img/calendar.PNG?raw=true "Fig.4 Calendar parameter")
+![__Fig.4 Calendar parameter__](img/calendar.png?raw=true "Fig.4 Calendar parameter")
 
 * __Signal detection period__. The default value of the signal detection period is:
     + 3 months out of 12 if time unit is "Month"
     + 13 weeks out of 53 if time unit is "Week".
 
 
-![__Fig.5 Signal detection period__](img/time.PNG?raw=true "Fig.5 Signal detection period")
+![__Fig.5 Signal detection period__](img/time.png?raw=true "Fig.5 Signal detection period")
 
     
 The _Signal detection algorithm_ panel allows to choose between the algorithms 

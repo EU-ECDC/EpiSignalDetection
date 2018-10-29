@@ -19,14 +19,14 @@ stratified by population characteristics (see 'Population' variable).
 <br>
 
 __Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__
-![](vignettes/img/app_full_screenshot20181022.png? "Fig.1 Signal detection tool for monitoring infectious diseases in TESSy")
+![](vignettes/img/app_full_screenshot20181022.png "Fig.1 Signal detection tool for monitoring infectious diseases in TESSy")
 
 <br>
 <br>
 <br>
 
 __Fig.2 Report of alarms__
-![](vignettes/img/report_screenshot_20181026.PNG "Fig.2 Report of alarms")
+![](vignettes/img/report_screenshot_20181026.png "Fig.2 Report of alarms")
 
 ...
 
