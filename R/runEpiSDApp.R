@@ -1,6 +1,6 @@
-#' Run the EpiSignalDectection Shiny application
+#' Run the EpiSignalDectection 'shiny' application
 #'
-#' Run the Shiny interactive application for signal detection analysis
+#' Run the 'shiny' interactive application for signal detection analysis
 #' using ECDC Atlas export data.
 #'
 #' Datasets to use in the tool:
@@ -25,6 +25,15 @@
 #' }
 #'
 #' @usage runEpiSDApp()
+#'
+#' @examples
+#' \donttest{
+#' # --- Run the 'shiny' app
+#' # --- (NB: please open the app in an external browser
+#' # --- in order to facilitate its use)
+#' runEpiSDApp()
+#' }
+#'
 #' @export
 #'
 runEpiSDApp <- function() {

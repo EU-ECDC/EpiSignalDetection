@@ -34,7 +34,7 @@ surveillance data at EU/EEA or country level.
 
 The package includes:
 
-* __Signal Detection tool__, an interactive Shiny application in which 
+* __Signal Detection tool__, an interactive 'shiny' application in which 
 the user can import external data and perform basic signal detection analyses;
 * __An automated report__ in HTML format, presenting the results of the time series 
 analysis in tables and graphs. 

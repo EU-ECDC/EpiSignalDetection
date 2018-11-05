@@ -9,7 +9,7 @@ at the European Union / European Economic Area or country level.
 
 The package includes:
 
-* __Signal Detection tool (Fig.1)__ an interactive Shiny application 
+* __Signal Detection tool (Fig.1)__ an interactive 'shiny' application 
 in which the user can import external data and perform basic signal detection analyses;
 * __An automated report (Fig.2)__ in HTML format, presenting the results 
 of the time series analysis in tables and graphs. This report can also be 
