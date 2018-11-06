@@ -2,12 +2,12 @@
 % Please edit documentation in R/runEpiSDApp.R
 \name{runEpiSDApp}
 \alias{runEpiSDApp}
-\title{Run the EpiSignalDectection Shiny application}
+\title{Run the EpiSignalDectection 'shiny' application}
 \usage{
 runEpiSDApp()
 }
 \description{
-Run the Shiny interactive application for signal detection analysis
+Run the 'shiny' interactive application for signal detection analysis
 using ECDC Atlas export data.
 }
 \details{
@@ -31,4 +31,13 @@ On the ECDC "Surveillance Atlas of Infectious Diseases" web site:
     \item --> Any dataset specified as described in the package vignette.
  }
 }
+}
+\examples{
+\donttest{
+# --- Run the 'shiny' app
+# --- (NB: please open the app in an external browser
+# --- in order to facilitate its use)
+runEpiSDApp()
+}
+
 }

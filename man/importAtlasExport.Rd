@@ -24,7 +24,10 @@ e.g. "ECDC_surveillance_data_Anthrax.csv" \cr
 The function will interpret missing reports '-' as NA values
 }
 \examples{
-# dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+\donttest{
+dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+}
+
 
 }
 \seealso{

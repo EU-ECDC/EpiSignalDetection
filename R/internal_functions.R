@@ -19,7 +19,10 @@
 #' @usage importAtlasExport(x)
 #'
 #' @examples
-#' # dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+#' \donttest{
+#' dataset <- importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv')
+#' }
+#'
 #'
 #' @seealso \code{\link{cleanAtlasExport}}
 #'
@@ -67,7 +70,10 @@ importAtlasExport <- function(x) {
 #' @seealso \code{\link{importAtlasExport}} \code{\link{filterAtlasExport}}
 #'
 #' @examples
-#' # dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') )
+#' \donttest{
+#' dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') )
+#' }
+#'
 #'
 #' @export
 
@@ -165,6 +171,7 @@ cleanAtlasExport <- function(x) {
 #'
 #' StudyPeriod <- studyPeriod(input)
 #' head(StudyPeriod)
+#'
 #' @export
 
 studyPeriod <- function(input){
@@ -436,8 +443,11 @@ stsSD <- function(observedCases, studyPeriod, timeUnit = "Month", startYM = c(20
 #' @param timeUnit character string for the time unit of the time series. Options are "Week" or "Month".
 #' @param testingPeriod numeric: number of time units (months, weeks) back in time to test the algorithm on
 #' (to detect outbreaks in)
+#'
 #' @return sts
+#'
 #' @usage algoSD(x.sts, algo = "FarringtonFlexible", timeUnit = "Month", testingPeriod = 5)
+#'
 #' @examples
 #' #-- Setting the parameters to run the report for
 #' input <- list(
@@ -475,6 +485,7 @@ stsSD <- function(observedCases, studyPeriod, timeUnit = "Month", startYM = c(20
 #'                        input$testingperiod)
 #'
 #' @seealso \code{\link{stsSD}} \code{\link{plotSD}}
+#'
 #' @export
 
 algoSD <- function(x.sts, algo = "FarringtonFlexible",

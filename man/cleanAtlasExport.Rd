@@ -30,7 +30,10 @@ The function will: \cr
 }
 }
 \examples{
-# dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') )
+\donttest{
+dataset <- cleanAtlasExport( importAtlasExport(x = 'ECDC_surveillance_data_Anthrax.csv') )
+}
+
 
 }
 \seealso{

@@ -14,13 +14,16 @@ Authors@R: c(
           role = c("aut", "fnd"), email = "tommi.karki@ecdc.europa.eu"),
   person( given = "Margot", family = "Einoder-Moreno", 
           role = c("ctb", "fnd"), email = "margot.einoder-moreno@ecdc.europa.eu")) 
-Description: The 'EpiSignalDetection' package allows the user to explore time series for signal detection. 
-    It is specifically designed to detect possible outbreaks using infectious disease surveillance data 
-    at the European Union / European Economic Area or country level. 
-    The package includes: 
-    - Signal Detection tool, an interactive Shiny application 
-      in which the user can import external data and perform basic signal detection analyses; 
-    - An automated report in HTML format, presenting the results of the time series analysis in tables and graphs. 
+Description: Exploring time series for signal detection. It is specifically designed
+    to detect possible outbreaks using infectious disease surveillance data
+    at the European Union / European Economic Area or country level.
+    Automatic detection tools used are presented in the paper
+    "Monitoring count time series in R: aberration detection in public health surveillance",
+    by Salmon et al. (2016) <doi:10.18637/jss.v070.i10>.
+    The package includes:
+    - Signal Detection tool, an interactive 'shiny' application
+      in which the user can import external data and perform basic signal detection analyses;
+    - An automated report in HTML format, presenting the results of the time series analysis in tables and graphs.
       This report can also be stratified by population characteristics (see 'Population' variable).
     This project was funded by the European Centre for Disease Prevention and Control.
 Depends: R (>= 3.4.0)

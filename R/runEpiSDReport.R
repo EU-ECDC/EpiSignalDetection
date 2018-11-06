@@ -51,10 +51,11 @@
 #'
 #'
 #' @examples
+#' \donttest{
 #' #-- Running the report as a standalone function
-#' #runEpiSDReport()    #Definition of each input parameter
+#' runEpiSDReport()    #Definition of each input parameter
 #'                      #is done one by one through the R console
-#'
+#' }
 #' #---> OR
 #'
 #' #-- First setting the parameters to run the report for
@@ -72,11 +73,11 @@
 #' #-- Second running the report based on the EpiSignalDetection::SignalData dataset
 #' #-- and store it in a temporary folder
 #' runEpiSDReport(input = input)
-#'
+#' \donttest{
 #' #-- Running the report based on the EpiSignalDetection::SignalData dataset
 #' #-- and store the HTML output 'test.html' in the folder 'C:/R/'
-#' # runEpiSDReport(input = input, outputfile = "C:/R/test.html")
-#'
+#' runEpiSDReport(input = input, outputfile = "C:/R/test.html")
+#' }
 #' #-- Running the report based on external data
 #' input <- list(
 #' file = list(datapath = "C:/Users/Downloads/ECDC_surveillance_data_Pertussis.csv"),
@@ -89,8 +90,9 @@
 #' algo = "FarringtonFlexible",
 #' testingperiod = 3
 #' )
-#' # runEpiSDReport(input = input, stratified = TRUE)
-#'
+#' \donttest{
+#' runEpiSDReport(input = input, stratified = TRUE)
+#' }
 #'
 #'
 #' @seealso Default dataset used in the report \code{\link{SignalData}}

@@ -36,4 +36,5 @@ testingperiod = 5
 
 StudyPeriod <- studyPeriod(input)
 head(StudyPeriod)
+
 }
