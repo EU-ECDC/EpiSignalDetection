@@ -16,7 +16,7 @@ of the time series analysis in tables and graphs. This report can also be
 stratified by population characteristics (see 'Population' variable).
 
 <br> 
-<br>
+<br> 
 
 __Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__
 ![](vignettes/img/app_full_screenshot20181022.png "Fig.1 Signal detection tool for monitoring infectious diseases in TESSy")
