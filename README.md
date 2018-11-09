@@ -15,7 +15,7 @@ in which the user can import external data and perform basic signal detection an
 of the time series analysis in tables and graphs. This report can also be 
 stratified by population characteristics (see 'Population' variable).
 
-<br>
+<br> 
 <br>
 
 __Fig.1 Signal detection tool for monitoring infectious diseases in TESSy__
