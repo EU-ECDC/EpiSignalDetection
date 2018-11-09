@@ -63,7 +63,7 @@ library(dplyr)
 ## ~~~~~~~~~~~~~~~~
 
 if(is.null(params$file)) {
-  dataset <- EpiSignalDetection::SignalData #eval(parse( text = params$dataset))
+  dataset <- EpiSignalDetection::SignalData
 } else {
   inFile <- params$file
   dataset <- EpiSignalDetection::importAtlasExport(inFile$datapath)
@@ -187,7 +187,7 @@ Result <- data.frame( Time = "" ,
                       Place = "" , 
                       Observed = "" ,
                       Threshold.ALGO = "", 
-                      ALGO = "", # Graph="", 
+                      ALGO = "",  
                       stringsAsFactors=FALSE)
 
 #-- Creation of a EU/EEA
