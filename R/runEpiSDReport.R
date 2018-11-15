@@ -203,6 +203,12 @@ runEpiSDReport <- function(input, stratified, outputfile){
   file.copy(system.file(reportDir, reportRmd, package = "EpiSignalDetection"),
             tempReport,
             overwrite = TRUE)
+  file.copy(system.file(reportDir, "subsection.Rmd", package = "EpiSignalDetection"),
+            file.path(tempPath, "subsection.Rmd"),
+            overwrite = TRUE)
+  file.copy(system.file(reportDir, "style.css", package = "EpiSignalDetection"),
+            file.path(tempPath, "style.css"),
+            overwrite = TRUE)
 
 
   # ---
@@ -210,7 +216,7 @@ runEpiSDReport <- function(input, stratified, outputfile){
   # ---
 
   rmarkdown::render(
-    system.file(reportDir, reportRmd, package = "EpiSignalDetection"),
+    tempReport,
     output_file = outputfile,
     params = list(file = input$file,
                   disease = input$disease,
